@@ -4,8 +4,8 @@ project:
 
 book:
   title: "CASA0025 Final Assessment"
-  author: "Group Name"
-  date: "01/01/2024"
+  author: "SQLer"
+  date: "04/01/2026"
   chapters:
     - index.qmd
 
