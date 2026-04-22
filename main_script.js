@@ -32,8 +32,8 @@ function maskS2clouds(image) {
 
 // 1. 将你的核心处理逻辑封装成一个“加工厂”
 var processYearlyData = function(year) {
-  var startDate = ee.Date.fromYMD(year, 3, 1);
-  var endDate = ee.Date.fromYMD(year, 5, 31);
+  var startDate = ee.Date.fromYMD(year, 1, 1);
+  var endDate = ee.Date.fromYMD(year, 12, 31);
   
   var col = ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
     .filterBounds(finalRegion2024)
@@ -129,8 +129,8 @@ function maskL8clouds(image) {
 
 // --- 2. 定义 Landsat 8 年份加工厂 ---
 var processYearlyLandsat = function(year) {
-  var startDate = ee.Date.fromYMD(year, 3, 1);
-  var endDate = ee.Date.fromYMD(year, 5, 31);
+  var startDate = ee.Date.fromYMD(year, 1, 1);
+  var endDate = ee.Date.fromYMD(year, 12, 31);
   
   var col = ee.ImageCollection("LANDSAT/LC08/C02/T1_L2")
     .filterBounds(finalRegion2024)
@@ -218,8 +218,8 @@ function maskL7clouds(image) {
 
 var process2016Fusion = function() {
   var year = 2016;
-  var startDate = '2016-03-01';
-  var endDate = '2016-05-31';
+  var startDate = '2016-01-01';
+  var endDate = '2016-12-31';
 
   // 定义内部加工函数：负责插值和波段对齐
   var prepL8 = function(img) {
