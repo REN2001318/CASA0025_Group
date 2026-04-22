@@ -339,3 +339,27 @@ var finalTidalFlat = finalTidalFlatRaw.updateMask(finalConnFilter.gte(25));
 Map.addLayer(mergedBeforeRF.selfMask(), {palette: ['#FFD54F'], opacity: 0.7}, 'Merged Base (Before RF)', false);
 Map.addLayer(finalTidalFlat.selfMask(), {palette: ['#E53935'], opacity: 0.8}, 'Final Tidal Flat', true);
 
+
+// 17. VECTORIZATION (Raster to Polygon)
+
+var finalTidalFlatInt = finalTidalFlat.selfMask().toInt();
+
+
+var tidalPolygons = finalTidalFlatInt.reduceToVectors({
+  geometry: studyArea,           
+  crs: 'EPSG:4326',              // WGS84（or: basemap.projection()）
+  scale: 10,                     // 10m
+  geometryType: 'polygon',       
+  eightConnected: true,          
+  labelProperty: 'class',        
+  maxPixels: 1e13               
+});
+
+// 18. EXPORT TO GOOGLE DRIVE
+
+Export.table.toDrive({
+  collection: tidalPolygons,
+  description: 'TidalFlat_Polygons_' + YEAR_LABEL, 
+  folder: 'GEE_Tidal_Exports',                     
+  fileFormat: 'SHP'                               
+});
