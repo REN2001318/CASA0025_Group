@@ -1,5 +1,33 @@
-// FINAL MERGED METHOD (Optimized RF order & Strict Extension)
-// Murray result kept + S2 result kept + union + RF last
+/**
+ * TIDAL FLAT EXTRACTION PIPELINE: HYBRID METHOD (RULES + RANDOM FOREST)
+ * * 1. PARAMETERS TO UPDATE FOR DIFFERENT YEARS:
+ * - YEAR_LABEL: String used for export/chart naming.
+ * - START / END: Core time window for Sentinel-2 collection (Crucial).
+ * - basemap filterDate (Step 3): Must match your target year for visual checks.
+ * - minPatchSize: Filtering inland noises after RF.
+ * 
+ * CORE LOGIC & METHODOLOGY OVERVIEW
+ * 
+ * * 1. THE MERGING STRATEGY (Murray Baseline + Sentinel-2 Dynamics):
+ * Relying on a single data source is insufficient. The Murray dataset lacks recent 
+ * dynamic changes, while relying solely on Sentinel-2 thresholds struggles with 
+ * the northern tidal flats, where differing physical properties (e.g., sediment 
+ * types, moisture) lead to severe omission errors. By merging the historical 
+ * baseline with S2 dynamic inundation rules and applying morphological smoothing, 
+ * we establish a physically logical, continuous "candidate zone" that minimizes 
+ * data-specific blind spots.
+ * 
+ * * 2. RANDOM FOREST & EDGE DENSITY FEATURE:
+ * Distinguishing natural tidal flats from coastal built-up areas, aquaculture 
+ * ponds, and salt pans is nearly impossible using standard spectral or inundation 
+ * filters, as they share highly similar water-frequency characteristics. To break 
+ * this bottleneck, we apply a Random Forest classifier armed with "Edge Density" 
+ * as a crucial spatial feature. In image learning, artificial structures present 
+ * highly rigid, straight, and concentrated geometric boundaries, unlike the 
+ * gradual, natural transitions of mudflats. The Edge Density feature allows the 
+ * model to recognize these unnatural textures, successfully isolating artificial 
+ * zones and carving out the true pixel-level boundaries of the tidal flats.
+ */
 
 // 1. PARAMETERS
 
