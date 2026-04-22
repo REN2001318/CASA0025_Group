@@ -1,4 +1,3 @@
-//GEE
 /**
  * 连云港候鸟栖息地识别系统 - 核心清洗脚本
  * 包含：NDWI/mNDWI 极值合成、Otsu 阈值、NDVI 筛选及多源数据整合
@@ -110,19 +109,22 @@ yearsList.forEach(function(year) {
 //2014-2017 landsat8
 // --- 1. 定义 Landsat 8 专用缩放与去云函数 (严格遵循老师的 C2 L2 标准) ---
 function maskL8clouds(image) {
-  // 老师代码中的缩放因子
+  // 1. 按照老师的公式计算缩放因子 (Scale Factors)
   var opticalBands = image.select('SR_B.').multiply(0.0000275).add(-0.2);
   
-  // 老师代码中的位运算去云 (QA_PIXEL)
+  // 2. 位运算逻辑定义 (Bitmask)
   var qa = image.select('QA_PIXEL');
-  var cloud = (1 << 3);
-  var cloudShadow = (1 << 4);
-  var mask = qa.bitwiseAnd(cloud).eq(0)
-    .and(qa.bitwiseAnd(cloudShadow).eq(0));
+  var cloudBitMask = (1 << 3);       // 第3位：云
+  var cloudShadowBitMask = (1 << 4); // 第4位：云阴影
+  
+  // 3. 生成掩膜：云和阴影的标志位都必须为 0
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+    .and(qa.bitwiseAnd(cloudShadowBitMask).eq(0));
 
+  // 4. 返回处理后的影像：替换原波段、应用掩膜、保留核心时间属性
   return image.addBands(opticalBands, null, true)
     .updateMask(mask)
-    .copyProperties(image, ["system:time_start", "CLOUD_COVER"]);
+    .copyProperties(image, ["system:time_start"]); 
 }
 
 // --- 2. 定义 Landsat 8 年份加工厂 ---
@@ -182,74 +184,92 @@ l8Years.forEach(function(year) {
 
 //Landsat7+Landsat8 2016
 
-// --- 1. 定义 Landsat 7 专用去云与波段重命名函数 ---
-// 目的是将 L7 的波段名（B1, B2...）统一映射到 L8 的命名体系
+// --- 2. 专门针对 2016 年的融合处理函数 (负责人重构版) ---
+
+/**
+ * 严格遵循老师逻辑的 Landsat 7 C2 L2 去云函数
+ * 1. 处理反射率缩放
+ * 2. 处理 L7 独有的波段偏移
+ */
 function maskL7clouds(image) {
+  // 1. 按照老师的公式计算缩放因子 (L7 C2 L2 同样适用此系数)
+  var opticalBands = image.select('SR_B.').multiply(0.0000275).add(-0.2);
+  
+  // 2. 位运算逻辑 (Landsat 4-7 的 QA_PIXEL 结构与 L8 基本一致)
   var qa = image.select('QA_PIXEL');
-  var cloud = (1 << 3);
-  var shadow = (1 << 4);
-  var mask = qa.bitwiseAnd(cloud).eq(0).and(qa.bitwiseAnd(shadow).eq(0));
+  var cloudBitMask = (1 << 3);       // 第3位：云
+  var cloudShadowBitMask = (1 << 4); // 第4位：云阴影
   
-  // 缩放因子 (L7 C2 L2 标准)
-  var optical = image.select('SR_B.').multiply(0.0000275).add(-0.2);
-  
-  // 关键：将 L7 波段名重命名为 L8 的格式，方便后续 merge
+  // 3. 生成掩膜
+  var mask = qa.bitwiseAnd(cloudBitMask).eq(0)
+    .and(qa.bitwiseAnd(cloudShadowBitMask).eq(0));
+
+  // 4. 特殊处理：将 L7 波段重命名为你的“母舰”标准名
   // L7: B1(B), B2(G), B3(R), B4(NIR), B5(SWIR1), B7(SWIR2)
-  // 对应 L8: B2, B3, B4, B5, B6, B7
-  return image.addBands(optical, null, true)
+  // 映射到标准: B2, B3, B4, B5, B6, B7
+  return image.addBands(opticalBands, null, true)
     .updateMask(mask)
     .select(
       ['SR_B1', 'SR_B2', 'SR_B3', 'SR_B4', 'SR_B5', 'SR_B7'],
-      ['SR_B2', 'SR_B3', 'SR_B4', 'SR_B5', 'SR_B6', 'SR_B7']
+      ['B2', 'B3', 'B4', 'B5', 'B6', 'B7']
     )
     .copyProperties(image, ["system:time_start"]);
 }
 
-// --- 2. 专门针对 2016 年的融合处理函数 ---
 var process2016Fusion = function() {
   var year = 2016;
   var startDate = '2016-03-01';
   var endDate = '2016-05-31';
 
-  // 获取 L8 集合
+  // 定义内部加工函数：负责插值和波段对齐
+  var prepL8 = function(img) {
+    return img.resample('bicubic') // 先插值
+      .select(['SR_B4', 'SR_B3', 'SR_B2', 'SR_B5', 'SR_B6', 'SR_B7'], ['B4', 'B3', 'B2', 'B5', 'B6', 'B7']);
+  };
+  
+  var prepL7 = function(img) {
+    return img.resample('bicubic') // 先插值
+};
+
+  // 获取并预处理 L8 集合
   var l8Col = ee.ImageCollection("LANDSAT/LC08/C02/T1_L2")
     .filterBounds(finalRegion2024)
     .filterDate(startDate, endDate)
     .filter(ee.Filter.lt('CLOUD_COVER', 20))
     .map(maskL8clouds)
-    .select(['SR_B4', 'SR_B3', 'SR_B2', 'SR_B5', 'SR_B6', 'SR_B7'], ['B4', 'B3', 'B2', 'B5', 'B6', 'B7']);
+    .map(prepL8);
     
   var l8Median = l8Col.median();
 
-  // 获取 L7 集合
+  // 获取并预处理 L7 集合
   var l7Col = ee.ImageCollection("LANDSAT/LE07/C02/T1_L2")
     .filterBounds(finalRegion2024)
     .filterDate(startDate, endDate)
     .filter(ee.Filter.lt('CLOUD_COVER', 40))
     .map(maskL7clouds)
-    .select(['SR_B4', 'SR_B3', 'SR_B2', 'SR_B5', 'SR_B6', 'SR_B7'], ['B4', 'B3', 'B2', 'B5', 'B6', 'B7']);
+    .map(prepL7);
   
   var l7Median = l7Col.median();
 
-  // 3. 【核心逻辑】：优先级混合 (Priority Blending)
-  // 逻辑：以 L7 为底，把 L8 盖上去。L8 有数据的地方会覆盖 L7，L8 没数据的地方会露出 L7。
+  // 3. 【核心混合逻辑】
+  // 使用 unmask：L8 有值用 L8，无值（洞）用 L7 补
   var fusedImage = l8Median.unmask(l7Median);
   
-  var resampledImage = fusedImage.resample('bicubic');
+  // 4. 指数计算 (此时 fusedImage 已经是插值后的平滑底图)
+  var ndvi = fusedImage.normalizedDifference(['B5', 'B4']).rename('NDVI');
+  var mndwi = fusedImage.normalizedDifference(['B3', 'B6']).rename('mNDWI');
+  var ndwi = fusedImage.normalizedDifference(['B3', 'B5']).rename('NDWI');
+  var ndbi = fusedImage.normalizedDifference(['B6', 'B5']).rename('NDBI');
   
-  var ndvi = resampledImage.normalizedDifference(['B5', 'B4']).rename('NDVI');
-  var mndwi = resampledImage.normalizedDifference(['B3', 'B6']).rename('mNDWI');
-  var ndwi = resampledImage.normalizedDifference(['B3', 'B5']).rename('NDWI');
-  var ndbi = resampledImage.normalizedDifference(['B6', 'B5']).rename('NDBI');
-  
-  var finalResult = resampledImage.addBands([ndvi, mndwi, ndwi, ndbi]);
+  var finalResult = fusedImage.addBands([ndvi, mndwi, ndwi, ndbi])
+    .select(['B4', 'B3', 'B2', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI']); 
 
   return finalResult.clip(finalRegion2024)
     .set('year', 2016)
     .set('source', 'L8-Primary, L7-Filler');
 };
 
-// --- 3. 执行并展示 ---
+
 var composite2016 = process2016Fusion();
 
 print('2016年融合后影像信息:', composite2016);
@@ -257,12 +277,13 @@ print('2016年融合后影像信息:', composite2016);
 Map.addLayer(composite2016, {bands: ['B4', 'B3', 'B2'], min: 0, max: 0.3}, '2016 L7+L8 融合底图 (修复版)');
 
 
+
 //数据包提取
 // 1. 定义分类器死令：必须且仅有这 9 个特征
 var commonBands = ['B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDBI'];
 
 // 2. 修正 Sentinel-2 提取 (2018-2024)
-var s2Standard = finalTimeSeries.map(function(img) {
+var s2Standard = finalTimeSeries.filter(ee.Filter.gt('image_count', 0)).map(function(img) {
   return img.select(
     ['B2', 'B3', 'B4', 'B8', 'B11', 'B12', 'NDVI', 'mNDWI', 'NDBI'], // S2 原名
     ['B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDBI']   // 统一映射
@@ -285,6 +306,11 @@ var fusion2016Standard = ee.ImageCollection([
 
 // 5. 合并！现在这个 Collection 里的每一张图，波段数都是 9，绝不报错。
 var fullDataPackage = s2Standard.merge(l8Standard).merge(fusion2016Standard);
+
+print('全年度数据包结构确认:', fullDataPackage.map(function(img){
+  return ee.Feature(null, {'year': img.get('year'), 'bands': img.bandNames().size()});
+}));
+
 
 
 
@@ -357,6 +383,47 @@ var sparseVeg = avgNDVI.lt(0.2)
     .clip(finalRegion2024);
     
 Map.addLayer(sparseVeg, {palette: 'green'}, '2024低植被区 (NDVI < 0.2)');
+
+
+//random forest
+// --- 修改后的 RF 逻辑：直接挂载母舰 ---
+
+// A. 提取 2024 年作为训练特征图
+var trainingImg = fullDataPackage.filter(ee.Filter.eq('year', 2024)).first();
+
+// B. 定义你的样本分类 (假设你已经在 Import 栏画好了 geometry1 和 geometry2)
+// geometry1 代表 class 0 (背景/非栖息地)
+// geometry2 代表 class 1 (目标栖息地)
+var pts_0 = ee.FeatureCollection(geometry1).map(function(f){return f.set('class', 0)});
+var pts_1 = ee.FeatureCollection(geometry2).map(function(f){return f.set('class', 1)});
+var trainingPolys = pts_0.merge(pts_1);
+
+// C. 采样特征
+var bandNames = trainingImg.bandNames(); // 这里就是你选的那 9 个标准化波段
+var training = trainingImg.sampleRegions({
+  collection: trainingPolys,
+  properties: ['class'],
+  scale: 10, // 强制 10 米，让 Landsat 自动 bicubic 插值
+  tileScale: 4
+}).filter(ee.Filter.notNull(bandNames));
+
+// D. 训练分类器
+var classifier = ee.Classifier.smileRandomForest(100).train({
+  features: training,
+  classProperty: 'class',
+  inputProperties: bandNames
+});
+
+// E. 【核心：全年度自动化分类】
+// 现在可以用这个分类器跑遍这 11 年的所有图了！
+var classifiedTimeSeries = fullDataPackage.map(function(img) {
+  var result = img.classify(classifier);
+  return result.set('year', img.get('year'));
+});
+
+// 展示 2024 年的分类结果
+var result2024 = classifiedTimeSeries.filter(ee.Filter.eq('year', 2024)).first();
+Map.addLayer(result2024, {min: 0, max: 1, palette: ['white', 'red']}, 'RF 2024 分类结果');
 
 
 
