@@ -319,19 +319,67 @@ window.Quarto = {
 <p>Fill in the sections below to provide a brief summary of your project. Each section should have no more than 100 words. Do not edit any of the headings.</p>
 <section id="problem-statement" class="level3">
 <h3 class="anchored" data-anchor-id="problem-statement">Problem Statement</h3>
-<p>What is the problem you’re trying to address using this application?</p>
+<p>What is the problem you’re trying to address using this application?
+  Lianyungang's coastal wetlands sit on the East Asian–Australasian Flyway, providing critical stopover habitat for migratory shorebirds including globally threatened species. 
+  Despite China's post-2018 reclamation moratorium and the Blue Bay remediation programme, coastal development continues to encroach on intertidal flats. 
+  Lianyungang was removed from the Yellow Sea World Heritage nomination shortlist in 2022 following contested environmental impact assessments. Ongoing litigation between conservation NGOs and development authorities highlights a persistent gap: the lack of spatially explicit, reproducible tools to evaluate where development pressures conflict with shorebird habitat. 
+  This application provides a low-cost, satellite-based proxy tool for rapid broad-scale identification of potential habitat loss and development conflict zones, helping prioritise areas that warrant further detailed field assessment.
+  *placeholder for Edited and improve
+</p>
 </section>
 <section id="end-user" class="level3">
 <h3 class="anchored" data-anchor-id="end-user">End User</h3>
-<p>Who are you building this application for? How does it address a need this community has?</p>
+<p>Who are you building this application for? How does it address a need this community has?
+  Coastal wetland managers and conservation planners within China's natural resources agencies and environmental NGOs.
+  Identify priority areas for protection or restoration across large stretches of coastline before committing to expensive field surveys.
+  Enables users to rapidly narrow down candidate sites where tidal flat loss, roosting habitat degradation, or coastal squeeze risk is highest, directing limited survey resources more efficiently.
+  *placeholder for Edited and improve
+</p>
 </section>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
-<p>What data are you using?</p>
+<p>What data are you using?
+  For Tidal Flat Identification：
+  Murray Global Intertidal Dataset, early (up to 2016) + 2019
+  SRTM DEM (USGS/SRTMGL1_003), elevation masking, coastal lowlands (≤10m)
+  Sentinel-2 and Landsat imagery, Surface Reflectance
+  NDWI, NDVI, water frequency (* use word: inundation frequency)
+  Sample: tidal/nontidal for Random forest
+
+  For Potential Roost Identification：
+  OSM landuse tag + polygon (positive/weak positive/negative/medium samples: four-class roosting site labels), for Random forest
+  Spectrally identified permanent water pixels (MNDWI > 0.75) sampled: negative training data
+  OSM waterway network (line+buffer), mask permanent water
+  *placeholder for Edited and improve
+
+</p>
 </section>
 <section id="methodology" class="level3">
 <h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
-<p>How are you using this data to address the problem?</p>
+<p>How are you using this data to address the problem?
+  Part 1: pre preprocessing,
+    tidal flat:
+      (1)Multi-temporal Sentinel-2 imagery: derive spectral indices, per-pixel inundation frequency + low-vegetation (*NDVI < 0.2*)
+      (2)Murray: per-pixel inundation frequency + vegetation masking + patch filtering
+      (1)+(2) as baseline, RF. 
+      14-feature stack including spectral bands, inundation frequency, elevation, water proximity, edge density, and NIR texture
+    potential root:
+      candidate mask: low-elevation (≤10 m), non-permanent-water (MNDWI ≤ 0.75), and low-vegetation (NDVI ≤ 0.2) pixels
+      four-class ordinal Random Forest
+      Migration-season (March–May) NDVI composites for neutral sample (medium) selection (capture seasonally bare ground) 
+      +filtering by area (≥8 ha)
+      Clean. by QGIS + OSM waterline buffer mask + fill holes + smooth 
+
+  Part 2: online application
+    Exported tidal flat and roost layers + distance buffer + area calculation
+    within distance bands + prioritized tidal flat/potential roost based on: area
+    panel
+    user interface
+
+    *placeholder for Edited and improve
+
+
+</p>
 </section>
 <section id="interface" class="level3">
 <h3 class="anchored" data-anchor-id="interface">Interface</h3>
@@ -348,7 +396,34 @@ window.Quarto = {
 </section>
 <section id="how-it-works" class="level2">
 <h2 class="anchored" data-anchor-id="how-it-works">How it Works</h2>
-<p>Use this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):</p>
+<p>Use this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):
+  Pre-processing Part:
+  tidal
+    1.study area (LYG_Final) + elevation masking, coastal land
+    2.A historical spatial baseline, Murray Global Intertidal Dataset, v1.1 (2014–2016 classification) with v2 2019 tidal wetland probability (>50%), masked to the low-elevation zone
+    3.morphological closing + vegetation exclusion (NDVI > 0.4)
+    4.Sentinel-2 time-series MNDWI + per-pixel inundation frequency + strict low vegetation (NDVI < 0.2) are extracted as candidate new tidal flats, capturing post-2019 changes/emerging flat.
+    5.merge + RF, especially Canny edge density, and NIR local standard deviation. Edge density and texture features are critical for distinguishing natural mudflats from geometrically regular aquaculture ponds
+  roost
+    0.Collect sample. PERMANENT WATER + OSM pos_core = ["aquaculture", "salt_pond", "basin"], pos_weak = ["brownfield"] neg_types = ["residential", "industrial", "commercial", "retail","construction", "railway", "education", "governmental","military", "garages", "cemetery", "landfill"] med_types = ["'farmland", "grass", "paddy"]
+    1.A candidate mask, permanent water (MNDWI > 0.75), high vegetation (NDVI > 0.2), and elevated terrain (>10 m)
+    2.Random Forest (50 trees)
+    3.migration-season composite (March–May) capture seasonally bare ground at NDVI < 0.15 (MED SAMPLE)
+    4.merged and undergo morphological segmentation. erosion breaks narrow dyke connections between adjacent ponds, area filtering retains sites ≥8 ha, and dilation with closing restores and generalises boundaries
+  All outputs are exported as raster assets for ingestion by the interactive application.
+  Online application Part:
+  analysis
+    1.Raster assets are loaded(selected year)
+    2.cleaned against JRC Global Surface Water (occurrence > 95%) to remove permanent water bodies
+    3.masked to eliminate spatial overlap
+    4.for conservation prioritisation: literature-derived thresholds (distance) + area statistics (km²) are computed to quantify the proportion of habitat falling within each accessibility tier.
+  User interface: 
+    5.Tidal gain/loss, five year 
+    (*placeholder for Edited and improve)
+
+    *placeholder for Edited and improve
+
+</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">setCenter</span>(<span class="fl">35.51898</span><span class="op">,</span> <span class="fl">33.90153</span><span class="op">,</span> <span class="dv">15</span>)<span class="op">;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">Map</span><span class="op">.</span><span class="fu">setOptions</span>(<span class="st">"satellite"</span>)<span class="op">;</span></span>
