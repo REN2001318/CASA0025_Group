@@ -56,6 +56,8 @@ How are you using this data to address the problem?
       Clean. by QGIS + OSM waterline buffer mask + fill holes + smooth 
 
   Part 2: online application
+    Tidal flat change was quantified by comparing binary raster outputs across 2014–2015, 2019, and 2024. 
+    Pixel-based area statistics and raster subtraction were used to derive total area change, percentage change, and spatial gain/loss patterns.
     Exported tidal flat and roost layers + distance buffer + area calculation
     within distance bands + prioritized tidal flat/potential roost based on: area
     panel
@@ -103,10 +105,13 @@ Pre-processing Part:
     3.masked to eliminate spatial overlap
     4.for conservation prioritisation: literature-derived thresholds (distance) + area statistics (km²) are computed to quantify the proportion of habitat falling within each accessibility tier.
   User interface: 
-    5.Tidal gain/loss, five year 
-    (*placeholder for Edited and improve)
+    5. Tidal flat area change and gain/loss mapping
 
-    *placeholder for Edited and improve 
+Tidal flat change was analysed using classified raster outputs from three time periods: 2014–2015, 2019, and 2024. Each raster was converted into a binary mask, where tidal flat pixels were assigned a value of 1 and non-tidal pixels were assigned a value of 0.
+
+Area was calculated by multiplying tidal flat pixels by pixel area and summing the result across the study area. Temporal change was calculated by subtracting earlier raster layers from later ones. In the change maps, positive values represent tidal flat gain, negative values represent tidal flat loss, and zero values represent no change.
+
+A manually defined mask was applied to remove a small urban area where misclassification affected the visual change map. This mask was used only for visual refinement and did not alter the original area statistics.
 
 ```js
 Map.setCenter(35.51898, 33.90153, 15);
