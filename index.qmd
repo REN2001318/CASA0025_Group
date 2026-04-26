@@ -224,6 +224,10 @@ What data are you using?
 (2)Murray: per-pixel inundation frequency + vegetation masking + patch filtering
       
 (3)Combination: (1)+(2) as baseline, RF. 15-feature stack including spectral bands, inundation frequency, elevation, water proximity, edge density, and NIR texture
+
+![Tidal Flat Workflow](images/tidalflat_workflow.png)
+
+
       
 **Potential root:**
     

@@ -562,6 +562,12 @@ Waterway lines + buffer → permanent water body mask
 <p>(1)Multi-temporal Sentinel-2 imagery: derive spectral indices, per-pixel inundation frequency + low-vegetation (<em>NDVI &lt; 0.2</em>)</p>
 <p>(2)Murray: per-pixel inundation frequency + vegetation masking + patch filtering</p>
 <p>(3)Combination: (1)+(2) as baseline, RF. 15-feature stack including spectral bands, inundation frequency, elevation, water proximity, edge density, and NIR texture</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tidalflat_workflow.png" class="img-fluid figure-img"></p>
+<figcaption>Tidal Flat Workflow</figcaption>
+</figure>
+</div>
 <p><strong>Potential root:</strong></p>
 <p>(1)Candidate mask: low-elevation (≤10 m), non-permanent-water (MNDWI ≤ 0.75), and low-vegetation (NDVI ≤ 0.2) pixels</p>
 <p>(2)Four-class ordinal Random Forest:</p>
