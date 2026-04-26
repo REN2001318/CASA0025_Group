@@ -267,7 +267,17 @@ Use this section to explain how your application works using code blocks and tex
 #### 1. Tidal
 1.1 Data Preparation and Precomputations
 
-study area (LYG_Final) + elevation masking, coastal land
+1.study area (LYG_Final) + elevation masking, coastal land
+
+2.A historical spatial baseline, Murray Global Intertidal Dataset, v1.1 (2014–2016 classification) with v2 2019 tidal wetland probability (>50%), masked to the low-elevation zone
+
+3.morphological closing + vegetation exclusion (NDVI > 0.4)
+
+4.Sentinel-2 time-series MNDWI + per-pixel inundation frequency + strict low vegetation (NDVI < 0.2) are extracted as candidate new tidal flats, capturing post-2019 changes/emerging flat.
+
+5.merge + RF, especially Canny edge density, and NIR local standard deviation. Edge density and texture features are critical for distinguishing natural mudflats from geometrically regular aquaculture ponds
+
+In this project, our study area covers Lianyungang and a 10 km coastal buffer zone. We first preprocess multi-source remote sensing data from 2014 to 2024 to generate annual feature stacks for tidal flat mapping.
 
 ::: {.scroll-code}
 ```javascript
@@ -640,18 +650,10 @@ fullDataPackage.aggregate_array('year').evaluate(function(years) {
 
 ```
 :::
-
-
-2.A historical spatial baseline, Murray Global Intertidal Dataset, v1.1 (2014–2016 classification) with v2 2019 tidal wetland probability (>50%), masked to the low-elevation zone
-
-3.morphological closing + vegetation exclusion (NDVI > 0.4)
-
-4.Sentinel-2 time-series MNDWI + per-pixel inundation frequency + strict low vegetation (NDVI < 0.2) are extracted as candidate new tidal flats, capturing post-2019 changes/emerging flat.
-
-5.merge + RF, especially Canny edge density, and NIR local standard deviation. Edge density and texture features are critical for distinguishing natural mudflats from geometrically regular aquaculture ponds
   
+We then use the Murray Global Intertidal Dataset (v1.1 and v2) as a spatial baseline and refine it through elevation masking and morphological cleaning. Based on this, we dynamically expand candidate tidal flat areas by analysing pixel-wise inundation frequency, and apply a strict NDVI threshold to remove vegetated regions (NDVI < 0.2).
 
-
+Finally, we train a random forest classifier that integrates Canny edge density and near-infrared texture features to distinguish natural tidal flats from aquaculture ponds.
 
 ::: {.scroll-code}
 ```javascript
