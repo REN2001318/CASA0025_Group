@@ -102,101 +102,115 @@ What data are you using?
   Spectrally identified permanent water pixels (MNDWI > 0.75) sampled: negative training data
   
   OSM waterway network (line+buffer), mask permanent water
-  
 
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-
-library(DT)
-library(htmltools)
-
-# 1. 准备数据
-# 注意：Link 列我们直接写成 HTML 的超链接标签
-data <- data.frame(
-  Category = c(rep("GEE", 4), rep("others", 3)),
-  Dataset = c("Murray Intertidal", "SRTM DEM", "S2/L8 Reflectance", "MNDWI Water", "RF Samples", 
-              "OSM Landuse", "OSM Waterway"),
-  Description = c("Historical baseline (v1.1 & v2)", "Elevation mask (≤10m)", 
-                  "15-band feature stacks", "Permanent water pixels", "Tidal/Nontidal points",
-                  "Roosting site labels (4 classes)", "Waterway network + Buffer"),
-  Source = c("GEE: UQ/murray", "GEE: USGS/SRTM", "GEE: Copernicus/USGS", "Computed Feature", "User Asset",
-             "External: OpenStreetMap", "External: OSM"),
-  Link = c(
-    '<a href="[https://developers.google.com/earth-engine/datasets/catalog/UQ_murray_Intertidal_v1_1_global_intertidal](https://developers.google.com/earth-engine/datasets/catalog/UQ_murray_Intertidal_v1_1_global_intertidal)" target="_blank"> View GEE Catalog</a>',
-    '<a href="[https://developers.google.com/earth-engine/datasets/catalog/USGS_SRTMGL1_003](https://developers.google.com/earth-engine/datasets/catalog/USGS_SRTMGL1_003)" target="_blank"> View GEE Catalog</a>',
-    '<a href="[https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED](https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED)" target="_blank"> View GEE Catalog</a>',
-    '<a href="#" onclick="return false;"> Calculated</a>',
-    '<a href="[https://code.earthengine.google.com/](https://code.earthengine.google.com/)" target="_blank"> User Assets</a>',
-    '<a href="[https://www.openstreetmap.org/](https://www.openstreetmap.org/)" target="_blank"> OSM Official</a>',
-    '<a href="[https://download.geofabrik.de/](https://download.geofabrik.de/)" target="_blank"> Geofabrik</a>'
-  )
-)
-
-# 2. 渲染表格
-datatable(data, 
-  escape = FALSE, 
-  rownames = FALSE,
-  options = list(
-    dom = 't', # 只保留表格，不显示多余的控件
-    pageLength = 7,
-    columnDefs = list(
-      list(className = 'dt-center', targets = "_all"))
-  ),
-  class = 'display compact cell-border'
-)
-```
 
 <style>
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Inter, system-ui, sans-serif;
+  background-color: #0d0d0d;
+  color: #e8e8e8;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
 
-.dataTables_wrapper {
+.data-table th {
   background-color: #1a1a1a;
-  border: 1px solid #edf2f7;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
-table.dataTable {
-  border-collapse: collapse !important;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-}
-
-/* 表头：浅灰蓝底色，深灰文字 */
-table.dataTable thead th {
-  background-color: #f1f5f9 !important; 
-  color: #475569 !important;
+  color: #a0a0a0;
   font-weight: 600;
+  font-size: 0.82rem;
   text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.025em;
-  padding: 12px !important;
+  letter-spacing: 0.06em;
+  padding: 12px 16px;
+  border-bottom: 1px solid #444;
+  text-align: left;
 }
 
-/* 鼠标悬停：亮色高亮 */
-table.dataTable.display tbody tr:hover {
-  background-color: #f8fafc !important; /* 极浅的灰色高亮，非常清爽 */
+.data-table td {
+  padding: 11px 16px;
+  border-top: 1px solid #222;
+  vertical-align: middle;
+  color: #e8e8e8;
 }
 
-/* 分类标签样式 (Category 列) */
-td:first-child {
-  font-weight: bold;
-  color: #2563eb; /* 蓝色加重 */
+/* Category */
+.data-table td.cat {
+  font-weight: 700;
+  color: #7eb8f7;
+  text-align: center;
+  border-right: 1px solid #333;
+  white-space: nowrap;
 }
 
-/* 链接样式 */
-table.dataTable a {
-  color: #3b82f6;
+/* Hover highlight: the entire line becomes bright gray */
+.data-table tbody tr:hover td {
+  background-color: #2a2a2a !important;
+}
+
+/* Link Style */
+.data-table a {
+  color: #7eb8f7;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-weight: 500;
+}
+.data-table a:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
-table.dataTable a:hover {
-  text-decoration: underline;
-  color: #1d4ed8;
+/* Dividing line */
+.data-table tr.group-end td {
+  border-bottom: 2px solid #444;
 }
 </style>
+
+<table class="data-table">
+  <tr>
+    <th>CATEGORY</th>
+    <th>DATASET</th>
+    <th>DESCRIPTION</th>
+    <th>SOURCE</th>
+  </tr>
+  <tr>
+    <td class="cat" rowspan="5">GEE</td>
+    <td>Sentinel-2</td>
+    <td>Used to extract band data from 2018-2024 and calculate screening criteria: B2-B7; NDVI/NDWI/mNDWI; Edge Density/NIR StdDev/Distance to Water/InundationFrequency/DEM/ValidCount</td>
+    <td><a href="https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED" target="_blank">Link</a></td>
+  </tr>
+  <tr>
+    <td>Landsat 7/8</td>
+    <td>Used to extract band data from 2014-2017 and calculate screening criteria: B2-B7; NDVI/NDWI/mNDWI; Edge Density/NIR StdDev/Distance to Water/InundationFrequency/DEM/ValidCount</td>
+    <td><a href="https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2" target="_blank">Link</a></td>
+  </tr>
+  <tr>
+    <td>Murray Global Intertidal</td>
+    <td>v1.1 (2014–2016) ∪ v2 prob &gt;50% (2019); historical tidal flat baseline</td>
+    <td><a href="https://developers.google.com/earth-engine/datasets/catalog/UQ_murray_Intertidal_v1_1_global_intertidal" target="_blank">Link</a></td>
+  </tr>
+  <tr>
+    <td>SRTM DEM</td>
+    <td>Used to screen low-lying areas below 10m along the coast</td>
+    <td><a href="https://developers.google.com/earth-engine/datasets/catalog/USGS_SRTMGL1_003" target="_blank">Link</a></td>
+  </tr>
+  <tr class="group-end">
+    <td>Administrative Boundary</td>
+    <td>Lianyungang boundary + 10 km coastal buffer</td>
+    <td><a href="https://developers.google.com/earth-engine/datasets/catalog/FAO_GAUL_2015_level2" target="_blank">Link</a></td>
+  </tr>
+  <tr>
+    <td class="cat" rowspan="2">Others</td>
+    <td>OSM Land Use</td>
+    <td>Land use polygons → four habitat sample types (positive / weak positive / medium / negative)</td>
+    <td><a href="https://www.openstreetmap.org/" target="_blank">Link</a></td>
+  </tr>
+  <tr>
+    <td>OSM Waterway</td>
+    <td>Waterway lines + buffer → permanent water body mask</td>
+    <td><a href="https://download.geofabrik.de/" target="_blank">Link</a></td>
+  </tr>
+</table>
+
 
 
 ### Methodology

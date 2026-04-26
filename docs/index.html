@@ -104,16 +104,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
-<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-<script src="site_libs/datatables-binding-0.34.0/datatables.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
-<link href="site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
-<script src="site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
-<link href="site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
-<script src="site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -404,61 +394,165 @@ window.Quarto = {
 <p>OSM landuse tag + polygon (positive/weak positive/negative/medium samples: four-class roosting site labels), for Random forest</p>
 <p>Spectrally identified permanent water pixels (MNDWI &gt; 0.75) sampled: negative training data</p>
 <p>OSM waterway network (line+buffer), mask permanent water</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-149f0d853f5acf95c0ef" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-149f0d853f5acf95c0ef">{"x":{"filter":"none","vertical":false,"data":[["GEE","GEE","GEE","GEE","others","others","others"],["Murray Intertidal","SRTM DEM","S2/L8 Reflectance","MNDWI Water","RF Samples","OSM Landuse","OSM Waterway"],["Historical baseline (v1.1 & v2)","Elevation mask (≤10m)","15-band feature stacks","Permanent water pixels","Tidal/Nontidal points","Roosting site labels (4 classes)","Waterway network + Buffer"],["GEE: UQ/murray","GEE: USGS/SRTM","GEE: Copernicus/USGS","Computed Feature","User Asset","External: OpenStreetMap","External: OSM"],["<a href=\"[https://developers.google.com/earth-engine/datasets/catalog/UQ_murray_Intertidal_v1_1_global_intertidal](https://developers.google.com/earth-engine/datasets/catalog/UQ_murray_Intertidal_v1_1_global_intertidal)\" target=\"_blank\"> View GEE Catalog<\/a>","<a href=\"[https://developers.google.com/earth-engine/datasets/catalog/USGS_SRTMGL1_003](https://developers.google.com/earth-engine/datasets/catalog/USGS_SRTMGL1_003)\" target=\"_blank\"> View GEE Catalog<\/a>","<a href=\"[https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED](https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED)\" target=\"_blank\"> View GEE Catalog<\/a>","<a href=\"#\" onclick=\"return false;\"> Calculated<\/a>","<a href=\"[https://code.earthengine.google.com/](https://code.earthengine.google.com/)\" target=\"_blank\"> User Assets<\/a>","<a href=\"[https://www.openstreetmap.org/](https://www.openstreetmap.org/)\" target=\"_blank\"> OSM Official<\/a>","<a href=\"[https://download.geofabrik.de/](https://download.geofabrik.de/)\" target=\"_blank\"> Geofabrik<\/a>"]],"container":"<table class=\"display compact cell-border\">\n  <thead>\n    <tr>\n      <th>Category<\/th>\n      <th>Dataset<\/th>\n      <th>Description<\/th>\n      <th>Source<\/th>\n      <th>Link<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"dom":"t","pageLength":7,"columnDefs":[{"className":"dt-center","targets":"_all"},{"name":"Category","targets":0},{"name":"Dataset","targets":1},{"name":"Description","targets":2},{"name":"Source","targets":3},{"name":"Link","targets":4}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[7,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
 <style>
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Inter, system-ui, sans-serif;
+  background-color: #0d0d0d;
+  color: #e8e8e8;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
 
-.dataTables_wrapper {
+.data-table th {
   background-color: #1a1a1a;
-  border: 1px solid #edf2f7;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-
-table.dataTable {
-  border-collapse: collapse !important;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-}
-
-/* 表头：浅灰蓝底色，深灰文字 */
-table.dataTable thead th {
-  background-color: #f1f5f9 !important; 
-  color: #475569 !important;
+  color: #a0a0a0;
   font-weight: 600;
+  font-size: 0.82rem;
   text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.025em;
-  padding: 12px !important;
+  letter-spacing: 0.06em;
+  padding: 12px 16px;
+  border-bottom: 1px solid #444;
+  text-align: left;
 }
 
-/* 鼠标悬停：亮色高亮 */
-table.dataTable.display tbody tr:hover {
-  background-color: #f8fafc !important; /* 极浅的灰色高亮，非常清爽 */
+.data-table td {
+  padding: 11px 16px;
+  border-top: 1px solid #222;
+  vertical-align: middle;
+  color: #e8e8e8;
 }
 
-/* 分类标签样式 (Category 列) */
-td:first-child {
-  font-weight: bold;
-  color: #2563eb; /* 蓝色加重 */
+/* Category */
+.data-table td.cat {
+  font-weight: 700;
+  color: #7eb8f7;
+  text-align: center;
+  border-right: 1px solid #333;
+  white-space: nowrap;
 }
 
-/* 链接样式 */
-table.dataTable a {
-  color: #3b82f6;
+/* Hover highlight: the entire line becomes bright gray */
+.data-table tbody tr:hover td {
+  background-color: #2a2a2a !important;
+}
+
+/* Link Style */
+.data-table a {
+  color: #7eb8f7;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-weight: 500;
+}
+.data-table a:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
-table.dataTable a:hover {
-  text-decoration: underline;
-  color: #1d4ed8;
+/* Dividing line */
+.data-table tr.group-end td {
+  border-bottom: 2px solid #444;
 }
 </style>
+<table class="data-table">
+<tbody><tr>
+<th>
+CATEGORY
+</th>
+<th>
+DATASET
+</th>
+<th>
+DESCRIPTION
+</th>
+<th>
+SOURCE
+</th>
+</tr>
+<tr>
+<td class="cat" rowspan="5">
+GEE
+</td>
+<td>
+Sentinel-2
+</td>
+<td>
+Used to extract band data from 2018-2024 and calculate screening criteria: B2-B7; NDVI/NDWI/mNDWI; Edge Density/NIR StdDev/Distance to Water/InundationFrequency/DEM/ValidCount
+</td>
+<td>
+<a href="https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR_HARMONIZED" target="_blank">Link</a>
+</td>
+</tr>
+<tr>
+<td>
+Landsat 7/8
+</td>
+<td>
+Used to extract band data from 2014-2017 and calculate screening criteria: B2-B7; NDVI/NDWI/mNDWI; Edge Density/NIR StdDev/Distance to Water/InundationFrequency/DEM/ValidCount
+</td>
+<td>
+<a href="https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C02_T1_L2" target="_blank">Link</a>
+</td>
+</tr>
+<tr>
+<td>
+Murray Global Intertidal
+</td>
+<td>
+v1.1 (2014–2016) ∪ v2 prob &gt;50% (2019); historical tidal flat baseline
+</td>
+<td>
+<a href="https://developers.google.com/earth-engine/datasets/catalog/UQ_murray_Intertidal_v1_1_global_intertidal" target="_blank">Link</a>
+</td>
+</tr>
+<tr>
+<td>
+SRTM DEM
+</td>
+<td>
+Used to screen low-lying areas below 10m along the coast
+</td>
+<td>
+<a href="https://developers.google.com/earth-engine/datasets/catalog/USGS_SRTMGL1_003" target="_blank">Link</a>
+</td>
+</tr>
+<tr class="group-end">
+<td>
+Administrative Boundary
+</td>
+<td>
+Lianyungang boundary + 10 km coastal buffer
+</td>
+<td>
+<a href="https://developers.google.com/earth-engine/datasets/catalog/FAO_GAUL_2015_level2" target="_blank">Link</a>
+</td>
+</tr>
+<tr>
+<td class="cat" rowspan="2">
+Others
+</td>
+<td>
+OSM Land Use
+</td>
+<td>
+Land use polygons → four habitat sample types (positive / weak positive / medium / negative)
+</td>
+<td>
+<a href="https://www.openstreetmap.org/" target="_blank">Link</a>
+</td>
+</tr>
+<tr>
+<td>
+OSM Waterway
+</td>
+<td>
+Waterway lines + buffer → permanent water body mask
+</td>
+<td>
+<a href="https://download.geofabrik.de/" target="_blank">Link</a>
+</td>
+</tr>
+</tbody></table>
 </section>
 <section id="methodology" class="level3">
 <h3 class="anchored" data-anchor-id="methodology">Methodology</h3>
@@ -508,7 +602,12 @@ table.dataTable a:hover {
 <section id="tidal" class="level4">
 <h4 class="anchored" data-anchor-id="tidal">1. Tidal</h4>
 <p>1.1 Data Preparation and Precomputations</p>
-<p>study area (LYG_Final) + elevation masking, coastal land</p>
+<p>1.study area (LYG_Final) + elevation masking, coastal land</p>
+<p>2.A historical spatial baseline, Murray Global Intertidal Dataset, v1.1 (2014–2016 classification) with v2 2019 tidal wetland probability (&gt;50%), masked to the low-elevation zone</p>
+<p>3.morphological closing + vegetation exclusion (NDVI &gt; 0.4)</p>
+<p>4.Sentinel-2 time-series MNDWI + per-pixel inundation frequency + strict low vegetation (NDVI &lt; 0.2) are extracted as candidate new tidal flats, capturing post-2019 changes/emerging flat.</p>
+<p>5.merge + RF, especially Canny edge density, and NIR local standard deviation. Edge density and texture features are critical for distinguishing natural mudflats from geometrically regular aquaculture ponds</p>
+<p>In this project, our study area covers Lianyungang and a 10 km coastal buffer zone. We first preprocess multi-source remote sensing data from 2014 to 2024 to generate annual feature stacks for tidal flat mapping.</p>
 <div class="scroll-code">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Data Preparation and Precomputations</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Set research location and basic elements</span></span>
@@ -877,10 +976,8 @@ table.dataTable a:hover {
 <span id="cb4-365"><a href="#cb4-365" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
 <span id="cb4-366"><a href="#cb4-366" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>2.A historical spatial baseline, Murray Global Intertidal Dataset, v1.1 (2014–2016 classification) with v2 2019 tidal wetland probability (&gt;50%), masked to the low-elevation zone</p>
-<p>3.morphological closing + vegetation exclusion (NDVI &gt; 0.4)</p>
-<p>4.Sentinel-2 time-series MNDWI + per-pixel inundation frequency + strict low vegetation (NDVI &lt; 0.2) are extracted as candidate new tidal flats, capturing post-2019 changes/emerging flat.</p>
-<p>5.merge + RF, especially Canny edge density, and NIR local standard deviation. Edge density and texture features are critical for distinguishing natural mudflats from geometrically regular aquaculture ponds</p>
+<p>We then use the Murray Global Intertidal Dataset (v1.1 and v2) as a spatial baseline and refine it through elevation masking and morphological cleaning. Based on this, we dynamically expand candidate tidal flat areas by analysing pixel-wise inundation frequency, and apply a strict NDVI threshold to remove vegetated regions (NDVI &lt; 0.2).</p>
+<p>Finally, we train a random forest classifier that integrates Canny edge density and near-infrared texture features to distinguish natural tidal flats from aquaculture ponds.</p>
 <div class="scroll-code">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Tidal Flat Identification - Unified Pipeline</span></span>
