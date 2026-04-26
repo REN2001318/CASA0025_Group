@@ -225,7 +225,7 @@ What data are you using?
       
 (3)Combination: (1)+(2) as baseline, RF. 15-feature stack including spectral bands, inundation frequency, elevation, water proximity, edge density, and NIR texture
 
-![Tidal Flat Workflow](images/tidalflat_workflow.png)
+![Tidal Flat Workflow](images/workflow_tidalflat.png)
 
 
       
@@ -240,6 +240,9 @@ What data are you using?
       +filtering by area (≥8 ha)
       
       Clean. by QGIS + OSM waterline buffer mask + fill holes + smooth 
+
+
+![Tidal Flat Workflow](images/workflow_roost.png)
 
 
 #### Part 2: online application
