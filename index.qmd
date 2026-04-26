@@ -241,7 +241,7 @@ What data are you using?
       Clean. by QGIS + OSM waterline buffer mask + fill holes + smooth 
 
 
-![Figure1. Tidal Flat Workflow](images/workflow_roost.svg){width="80%" fig-align="center"}
+![Figure2. Roost Workflow](images/workflow_roost.svg){width="80%" fig-align="center"}
 
 
 #### Part 2: online application
