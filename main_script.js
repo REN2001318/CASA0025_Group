@@ -53,6 +53,7 @@ var processYearlyData = function(year) {
     return img.normalizedDifference(['B3', 'B11']).gt(0).rename('water_mask');
   });
   var inundationFrequency = waterCol.reduce(ee.Reducer.mean()).rename('inund_freq');
+  var validCount = waterCol.count().rename('valid_count');
   
   // 2.2 Generate a median composite map for that year
   
@@ -96,10 +97,10 @@ var processYearlyData = function(year) {
   
   return median.addBands([
     ndwi, mndwi, ndvi, ndbi, 
-    inundationFrequency, edgeDensity, localStdDev, distToWater, elevation
+    inundationFrequency, validCount, edgeDensity, localStdDev, distToWater, elevation
   ]).select(
-    ['B2', 'B3', 'B4', 'B8', 'B11', 'B12', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation'],
-    ['B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation']
+    ['B2', 'B3', 'B4', 'B8', 'B11', 'B12', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'valid_count', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation'],
+    ['B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'valid_count', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation']
   ).set('year', year);
 };
 
@@ -150,7 +151,8 @@ var processYearlyLandsat = function(year) {
     return img.normalizedDifference(['SR_B3', 'SR_B6']).gt(0).rename('water_mask');
   });
   var inundationFrequency = waterCol.reduce(ee.Reducer.mean()).rename('inund_freq');
-
+  var validCount = waterCol.count().rename('valid_count');
+  
   // 2.2 Generate a median composite map for that year
 
   // Resample first and then take median to ensure interpolation effect
@@ -188,10 +190,10 @@ var processYearlyLandsat = function(year) {
   
   return median.addBands([
     ndvi, mndwi, ndwi, ndbi, 
-    inundationFrequency, edgeDensity, localStdDev, distToWater, elevation
+    inundationFrequency, validCount, edgeDensity, localStdDev, distToWater, elevation
   ]).select(
-    ['SR_B2', 'SR_B3', 'SR_B4', 'SR_B5', 'SR_B6', 'SR_B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation'],
-    ['B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation']
+    ['SR_B2', 'SR_B3', 'SR_B4', 'SR_B5', 'SR_B6', 'SR_B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'valid_count', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation'],
+    ['B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'valid_count', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation']
   )
   .set('year', year)
   .set('image_count', imgCount)
@@ -259,7 +261,8 @@ var process2016Fusion = function() {
   
   var combinedWater = l8Water.merge(l7Water);
   var inundationFrequency = combinedWater.reduce(ee.Reducer.mean()).rename('inund_freq');
-
+  var validCount = combinedWater.count().rename('valid_count');
+  
   // 2.4 First, interpolate and align to regenerate the base image
   // L8 base image processing
   var l8Median = l8ColRaw.map(function(img) {
@@ -308,9 +311,9 @@ var process2016Fusion = function() {
   
   return fusedImage.addBands([
     ndvi, mndwi, ndwi, ndbi, 
-    inundationFrequency, edgeDensity, localStdDev, distToWater, elevation
+    inundationFrequency, validCount, edgeDensity, localStdDev, distToWater, elevation
   ]).select(
-    ['B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation']
+    ['B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'NDVI', 'mNDWI', 'NDWI', 'NDBI', 'inund_freq', 'valid_count', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation']
   ).set('year', 2016).set('source', 'L8-Primary, L7-Filler_10m');
 };
 
@@ -342,7 +345,7 @@ fullDataPackage.aggregate_array('year').evaluate(function(years) {
 var exportBands = [
   'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 
   'NDVI', 'mNDWI', 'NDWI', 'NDBI', 
-  'inund_freq', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation'
+  'inund_freq', 'valid_count', 'edge_density', 'nir_stdDev', 'dist_water', 'elevation'
 ];
 
 fullDataPackage.aggregate_array('year').evaluate(function(years) {
@@ -352,16 +355,15 @@ fullDataPackage.aggregate_array('year').evaluate(function(years) {
     
     var finalImg = imgToExport.select(exportBands).float();
 
-    Export.image.toDrive({
+    Export.image.toAsset({
       image: finalImg,
-      description: 'LYG_FullFeatureStack_' + year,
-      folder: 'GEE_Lianyungang_Project',
-      fileNamePrefix: 'LYG_Stack_' + year, 
+      description: 'LYG_15_features_' + year,
+      assetId: 'projects/my-project-20260224-488410/assets/LYG_TimeSeries_Stacks_1/LYG_Stack_' + year,
       region: finalRegion2024,
       scale: 10,
       maxPixels: 1e13,
       crs: 'EPSG:4326',
-      fileFormat: 'GeoTIFF'
     });
   });
 });
+
