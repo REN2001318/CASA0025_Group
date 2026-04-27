@@ -173,13 +173,18 @@ Both layers are linked through distance computation and multi-year change detect
 
 How does your application's interface work to address the needs of your end user?
 
-## The Application 
+## The Application
 
-Replace the link below with the link to your application.
+This section embeds the live Google Earth Engine application developed for exploring shoreline habitat and tidal flat dynamics.
 
-:::{.column-page}
+::: {.column-page}
 
-<iframe src='https://ollielballinger.users.earthengine.app/view/turkey-earthquake' width='100%' height='700px'></iframe>
+<iframe 
+  src="https://ee-summerxxxa99.projects.earthengine.app/view/shorebird-habitat-explorer"
+  width="100%" 
+  height="780px"
+  style="border:none; border-radius:18px;">
+</iframe>
 
 :::
 ## How it Works 
