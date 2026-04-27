@@ -18,44 +18,11 @@
 }
 </style>
 
-//标题背景图--等候纹理图
-<div class="hero-banner">
-  <div class="hero-text">
-    <h1>Lianyungang Blue Corridor</h1>
-    <p>Estuarine Habitat Dynamics for Migratory Birds</p>
-  </div>
-</div>
-
-<style>
-.hero-banner {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                    url('your_texture_image.png'); /* 替换为你导出的河口纹理图 */
-  background-size: cover;
-  background-position: center;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  border-radius: 12px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-.hero-text h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 0px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-.hero-text p {
-  font-size: 1.2rem;
-  opacity: 0.9;
-}
-</style>
-
-# Lianyungang Blue Corridor: Estuarine Habitat Dynamics for Migratory Birds
+---
+title-block-banner: images/picture1.jpg
+title: "Lianyungang Blue Corridor: Estuarine Habitat Dynamics for Migratory Birds"
+css: styles.css
+---
 
 ## Project Summary 
 
@@ -206,9 +173,17 @@ Who are you building this application for? How does it address a need this commu
       
 (3)Combination: (1)+(2) as baseline, RF. 15-feature stack including spectral bands, inundation frequency, elevation, water proximity, edge density, and NIR texture
 
-![Figure1. Tidal Flat Workflow](images/workflow_tidalflat.svg){width="80%" fig-align="center"}
 
-![Figure1. Tidal Flat Workflow](images/Group_1.svg){width="80%" fig-align="center"}
+::: {style="text-align: center;"}
+![Figure1. Total Workflow](images/Group_4.svg){width="80%"}
+:::
+
+![Figure1. Total Workflow](images/Group_4.svg){width="80%" fig-align="center"}
+
+
+
+![Figure3. Tidal Flat Workflow](images/Group_2_2.svg){width="80%" fig-align="center"}
+
 
 **Potential root:**
     
@@ -216,18 +191,16 @@ Who are you building this application for? How does it address a need this commu
 
 (2)Four-class ordinal Random Forest:
 
-      Migration-season (March–May) NDVI composites for neutral sample (medium) selection (capture seasonally bare ground) 
+Migration-season (March–May) NDVI composites for neutral sample (medium) selection (capture seasonally bare ground) 
       
-      +filtering by area (≥8 ha)
++filtering by area (≥8 ha)
       
-      Clean. by QGIS + OSM waterline buffer mask + fill holes + smooth 
+Clean. by QGIS + OSM waterline buffer mask + fill holes + smooth 
 
 
-![Figure2. Roost Workflow](images/workflow_roost.svg){width="80%" fig-align="center"}
 
-![Figure1. Tidal Flat Workflow](images/Group_2_2.svg){width="80%" fig-align="center"}
 
-![Figure1. Tidal Flat Workflow](images/Group_3.svg){width="83%" fig-align="center"}
+
 
 ### Part 2: online application
 Exported tidal flat and roost layers + distance buffer + area calculation
@@ -654,6 +627,10 @@ We then use the Murray Global Intertidal Dataset (v1.1 and v2) as a spatial base
 
 Finally, we train a random forest classifier that integrates Canny edge density and near-infrared texture features to distinguish natural tidal flats from aquaculture ponds.
 
+![Figure2. Tidal Flat Workflow](images/workflow_tidalflat_1.svg){width="60%" fig-align="center"}
+
+![Figure2. Tidal Flat Workflow](images/Group_1.svg){width="80%" fig-align="center"}
+
 ::: {.scroll-code}
 ```javascript
 
@@ -834,6 +811,12 @@ Map.addLayer(
 #### 2. Roost
 
 Roost identification uses a four-class suitability gradient: from managed pond embankments (pos_core) to built-up areas (neg_core), and is designed around roosting ecology. A Random Forest classifier (50 trees) operates within a physically constrained candidate area (DEM ≤ 10 m, NDVI ≤ 0.2, mNDWI < 0.75). A migration-season composite (spring March–May, autumn August–October) captures seasonally bare ground missed by the annual median.
+
+![Figure2. Roost Workflow](images/workflow_roost_2.svg){width="60%" fig-align="center"}
+
+![Figure6. Tidal Flat Workflow](images/Group_3.svg){width="83%" fig-align="center"}
+
+
 ::: {.scroll-code}
 ```javascript  
 
@@ -1045,7 +1028,7 @@ Export.image.toAsset({
 });
 
 ```
-:::
+::: 
 
 Large tidal-flat patches exceed GEE's connectedPixelCount size limit, preventing reliable area-based filtering. These were removed in QGIS where vector-based area calculation has no such constraint. The cleaned raster was re-uploaded for post-processing below.
 
@@ -1167,13 +1150,6 @@ A manually defined mask was applied to remove a small urban area where misclassi
 
 
 
-
-
-
-
-You can include images:
-
-![Pixelwise T-Test, 2018](images/beirut_change_2020.jpg)
 
 and math:
 $$ \Large t = {\frac{\overline{x_1}-\overline{x_2}} {\sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}}} $$

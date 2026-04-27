@@ -23,6 +23,7 @@ format:
     theme:
       dark: darkly
       light: cosmo
+    css: styles_1.css
     code-copy: true
     code-overflow: wrap
     highlight-style: monokai.theme
