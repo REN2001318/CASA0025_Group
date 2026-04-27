@@ -43,7 +43,7 @@ Through an interactive GEE platform, it helps local wetland managers visualise t
 
 ## End User 
 
-This application is built for local coastal wetland managers, conservation planners, natural resources agencies, and environmental NGOs in Lianyungang, China. It helps these users preliminarily identify priority areas for protection or restoration across long coastlines before committing to costly field surveys. With this app, they’re able to rapidly narrow down candidate sites where tidal-flat loss, potential resting-place degradation, or coastal squeeze risk may be highest. 
+This application is tailored for coastal managers and conservation planners within Chinese natural resource agencies and environmental NGOs. These users need to monitor vast, changing coastlines and wetlands, but satellite observation alone cannot confirm local habitat conditions, while field validation is costly and time-consuming. As a preliminary screening tool, the app helps connect broad satellite-based monitoring with targeted follow-up fieldwork. It identifies candidate areas where coastal squeeze, tidal-flat loss, or potential habitat degradation may require closer investigation, allowing limited survey resources to be used more efficiently.
 
 ## Data
 
