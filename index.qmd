@@ -2,7 +2,7 @@
 .scroll-code {
   max-height: 300px;
   overflow-y: auto;
-  border: 1px solid #e1e1e1;
+  border: 1px solid var(--line, #e1e1e1);
   border-radius: 8px;
   box-shadow: none;
   background-color: transparent; 
@@ -52,59 +52,59 @@ This application is built for local coastal wetland managers, conservation plann
   width: 100%;
   border-collapse: collapse;
   font-family: Inter, system-ui, sans-serif;
-  background-color: #0d0d0d;
-  color: #e8e8e8;
-  border: 1px solid #333;
+  background-color: var(--card-bg, #ffffff);
+  color: var(--text, #2a2630);
+  border: 1px solid var(--line, #e6eaec);
   border-radius: 8px;
 }
 
 .data-table th {
-  background-color: #1a1a1a;
-  color: #a0a0a0;
+  background-color: var(--bg-alt, #f3f6f5);
+  color: var(--text-mute, #8a8395);
   font-weight: 600;
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   padding: 12px 16px;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid var(--line-strong, #d2d8dd);
   text-align: left;
 }
 
 .data-table td {
   padding: 11px 16px;
-  border-top: 1px solid #222;
+  border-top: 1px solid var(--line, #e6eaec);
   vertical-align: middle;
-  color: #e8e8e8;
+  color: var(--text-soft, #5b5566);
 }
 
 /* Category */
 .data-table td.cat {
   font-weight: 700;
-  color: #7eb8f7;
+  color: var(--bright-ocean, #3c91e6);
   text-align: center;
-  border-right: 1px solid #333;
+  border-right: 1px solid var(--line, #e6eaec);
   white-space: nowrap;
 }
 
-/* Hover highlight: the entire line becomes bright gray */
+/* Hover highlight */
 .data-table tbody tr:hover td {
-  background-color: #2a2a2a !important;
+  background-color: rgba(60,145,230,0.06) !important;
 }
 
 /* Link Style */
 .data-table a {
-  color: #7eb8f7;
+  color: var(--bright-ocean, #3c91e6);
   text-decoration: none;
   font-weight: 500;
 }
 .data-table a:hover {
-  color: #ffffff;
+  color: var(--bright-ocean-dark, #2a73c0);
   text-decoration: underline;
 }
 
 /* Dividing line */
 .data-table tr.group-end td {
-  border-bottom: 2px solid #444;
+  border-bottom: 2px solid var(--line-strong, #d2d8dd);
 }
 </style>
 

@@ -24,6 +24,10 @@
   --text-mute: #8a8395;
   --line: #e6eaec;
   --line-strong: #d2d8dd;
+  --card-bg: #ffffff;
+  --topbar-bg: rgba(250, 255, 253, 0.85);
+  --topbar-border: rgba(52,46,55,0.08);
+  --footer-bg: #342e37;
 
   /* RADII */
   --r-sm: 8px;
@@ -50,6 +54,75 @@
   --font-display: "Fraunces", "Inter", serif;
 }
 
+/* ============ DARK MODE OVERRIDES ============ */
+body.quarto-dark {
+  --bg: #1a1d2e;
+  --bg-alt: #20233a;
+  --bg-deep: #0f1120;
+  --text: #dddbe4;
+  --text-soft: #a8a4b4;
+  --text-mute: #706c80;
+  --line: #2c2f48;
+  --line-strong: #3c3f5c;
+  --shadow-grey: #e4e1ec;
+  --shadow-grey-2: #b8b4c4;
+  --card-bg: #222540;
+  --topbar-bg: rgba(26, 29, 46, 0.88);
+  --topbar-border: rgba(255,255,255,0.06);
+  --footer-bg: #14162a;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.25), 0 2px 6px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.25);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.35), 0 24px 60px rgba(0,0,0,0.3);
+  --shadow-xl: 0 24px 56px rgba(0,0,0,0.4), 0 48px 120px rgba(0,0,0,0.35);
+  background: var(--bg) !important;
+  color: var(--text) !important;
+}
+body.quarto-dark .summary-bird {
+  mix-blend-mode: screen;
+  opacity: 0.18;
+  filter: invert(1);
+}
+body.quarto-dark .data-table thead {
+  background: linear-gradient(180deg, #1a1d30 0%, #22253c 100%);
+}
+body.quarto-dark .data-table tbody tr:hover {
+  background: rgba(60,145,230,0.10);
+}
+body.quarto-dark .data-table tbody th.data-cat {
+  background: rgba(60,145,230,0.12);
+}
+body.quarto-dark .data-table tbody th.data-cat span {
+  background: var(--card-bg);
+  border-color: rgba(60,145,230,0.35);
+}
+body.quarto-dark .user-row .user-icon {
+  background: rgba(60,145,230,0.18);
+}
+body.quarto-dark .iface-icon {
+  background: rgba(159,211,86,0.14);
+}
+body.quarto-dark .placeholder-img {
+  background: linear-gradient(135deg, var(--bg-alt) 0%, #2a2d44 100%);
+}
+body.quarto-dark .placeholder-img::after {
+  background-color: var(--card-bg);
+}
+body.quarto-dark .placeholder-img::before {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0,
+    transparent 22px,
+    rgba(60,145,230,0.08) 22px,
+    rgba(60,145,230,0.08) 44px
+  );
+}
+body.quarto-dark .method-text .m-num {
+  background: rgba(60,145,230,0.12);
+}
+body.quarto-dark .scroll-code {
+  border-color: #3a3a4a;
+}
+
 /* ============ RESET ============ */
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -58,8 +131,8 @@ body {
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.65;
-  color: var(--text);
-  background: var(--bg);
+  color: var(--text) !important;
+  background: var(--bg) !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
@@ -92,10 +165,10 @@ hr { border: 0; }
   top: 0;
   z-index: 100;
   height: var(--topbar-h);
-  background: rgba(250, 255, 253, 0.85);
+  background: var(--topbar-bg);
   backdrop-filter: saturate(180%) blur(14px);
   -webkit-backdrop-filter: saturate(180%) blur(14px);
-  border-bottom: 1px solid rgba(52,46,55,0.08);
+  border-bottom: 1px solid var(--topbar-border);
 }
 .topbar-inner {
   max-width: var(--max-w);
@@ -602,7 +675,7 @@ hr { border: 0; }
   gap: 12px;
 }
 .user-row {
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   padding: 22px 26px;
@@ -656,7 +729,7 @@ hr { border: 0; }
 
 /* ============ 04 DATA TABLE ============ */
 .data-table-wrap {
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   overflow: hidden;
@@ -707,7 +780,7 @@ hr { border: 0; }
   font-size: 13px;
   letter-spacing: 0.04em;
   color: var(--bright-ocean-dark);
-  background: white;
+  background: var(--card-bg);
   border: 1px solid rgba(60,145,230,0.25);
   padding: 5px 12px;
   border-radius: 999px;
@@ -729,6 +802,37 @@ hr { border: 0; }
   color: var(--text-mute);
   font-weight: 500;
   font-style: italic;
+}
+/* Inline data-table (no thead/tbody wrappers, uses td.cat) */
+.data-table th {
+  text-align: left;
+  padding: 16px 22px;
+  background: linear-gradient(180deg, var(--shadow-grey) 0%, var(--shadow-grey-2) 100%);
+  color: rgba(250,255,253,0.96);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.data-table td {
+  padding: 14px 22px;
+  border-top: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--text-soft);
+}
+.data-table td.cat {
+  font-weight: 700;
+  color: var(--bright-ocean);
+  text-align: center;
+  border-right: 1px solid var(--line);
+  white-space: nowrap;
+  background: rgba(60,145,230,0.07);
+}
+.data-table tr.group-end td {
+  border-bottom: 2px solid var(--line-strong);
+}
+.data-table tr:hover td {
+  background-color: rgba(60,145,230,0.05);
 }
 
 /* ============ 05 METHODOLOGY ROWS ============ */
@@ -791,7 +895,7 @@ hr { border: 0; }
   gap: 18px;
 }
 .iface-card {
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   overflow: hidden;
@@ -876,14 +980,14 @@ hr { border: 0; }
   background:
     radial-gradient(circle at 30% 35%, var(--line-strong) 0 5px, transparent 6px),
     linear-gradient(135deg, transparent 50%, var(--line-strong) 50% 60%, transparent 60%);
-  background-color: white;
+  background-color: var(--card-bg);
   opacity: 0.55;
   z-index: 1;
 }
 .placeholder-tag {
   position: relative;
   z-index: 2;
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--line);
   font-size: 10.5px;
   font-weight: 700;
@@ -981,7 +1085,7 @@ hr { border: 0; }
   gap: 18px;
 }
 .how-card {
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   padding: 24px 24px 22px;
@@ -1139,7 +1243,7 @@ hr { border: 0; }
 
 /* ============ FOOTER ============ */
 .site-footer {
-  background: var(--shadow-grey);
+  background: var(--footer-bg);
   color: rgba(250,255,253,0.78);
   padding: 36px 0;
   font-size: 13px;
@@ -1166,7 +1270,7 @@ hr { border: 0; }
   gap: 8px;
   padding: 9px 14px;
   border-radius: 999px;
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--line);
   color: var(--shadow-grey);
   font-size: 13px;
@@ -1202,7 +1306,7 @@ body.in-app .toc-inner {
   top: 48px;
   left: 0;
   width: 240px;
-  background: white;
+  background: var(--card-bg);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   box-shadow: var(--shadow-lg);
@@ -1296,30 +1400,4 @@ body.in-app .toc.expanded .toc-inner {
   .method-text h3 { font-size: 22px; }
   .data-table { font-size: 13px; }
   .code-block pre { font-size: 11.5px; padding: 12px 14px; }
-}
-
-/* Forced restoration of black background */
-body {
-  background-color: #222 !important;
-  color: #fff !important;
-}
-
-#title-block-header {
-  background-color: #222 !important;
-}
-
-/* Gee app margin */
-.gee-frame-card {
-  width: calc(100vw - 40px);
-  margin-left: 20px;
-  margin-right: 20px;
-  border-radius: 18px;
-  overflow: hidden;
-}
-
-.gee-frame-card iframe {
-  width: 100%;
-  height: 920px;
-  border: none;
-  display: block;
 }
