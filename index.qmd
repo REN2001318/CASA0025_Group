@@ -163,16 +163,9 @@ Who are you building this application for? How does it address a need this commu
 
 ## Methodology
 
-### Part 1: Pre preprocessing
+Mapping shorebird potential habitat requires mapping both feeding grounds (tidal flats) and resting sites (roost), as distance between the two determines habitat quality. Tidal-flat mapping combines the Murray Global Intertidal baseline with annually derived inundation-frequency extensions, refined through Random Forest classification. Roost sites are identified through a four-class suitability gradient within a physically constrained candidate area. A migration-season composite identifies farmland and grassland areas that appear vegetated in annual imagery but are bare during spring passage, supplementing the annual roost classifier. 
 
-**Tidal flat:**
-    
-(1)Multi-temporal Sentinel-2 imagery: derive spectral indices, per-pixel inundation frequency + low-vegetation (*NDVI < 0.2*)
-      
-(2)Murray: per-pixel inundation frequency + vegetation masking + patch filtering
-      
-(3)Combination: (1)+(2) as baseline, RF. 15-feature stack including spectral bands, inundation frequency, elevation, water proximity, edge density, and NIR texture
-
+Both layers are linked through distance computation and multi-year change detection in the interactive application.
 
 ::: {style="text-align: center;"}
 ![Figure1. Total Workflow](images/Group_4.svg){width="80%"}
@@ -183,45 +176,6 @@ Who are you building this application for? How does it address a need this commu
 
 
 ![Figure3. Tidal Flat Workflow](images/Group_2_2.svg){width="80%" fig-align="center"}
-
-
-**Potential root:**
-    
-(1)Candidate mask: low-elevation (≤10 m), non-permanent-water (MNDWI ≤ 0.75), and low-vegetation (NDVI ≤ 0.2) pixels
-
-(2)Four-class ordinal Random Forest:
-
-Migration-season (March–May) NDVI composites for neutral sample (medium) selection (capture seasonally bare ground) 
-      
-+filtering by area (≥8 ha)
-      
-Clean. by QGIS + OSM waterline buffer mask + fill holes + smooth 
-
-
-
-
-
-
-### Part 2: online application
-Exported tidal flat and roost layers + distance buffer + area calculation
-    
-within distance bands + prioritized tidal flat/potential roost based on: 
-
-  Part 2: online application
-    Tidal flat change was quantified by comparing binary raster outputs across 2014–2015, 2019, and 2024. 
-    Pixel-based area statistics and raster subtraction were used to derive total area change, percentage change, and spatial gain/loss patterns.
-    Exported tidal flat and roost layers + distance buffer + area calculation
-    within distance bands + prioritized tidal flat/potential roost based on: area
-    panel
-    user interface
-
-    *placeholder for Edited and improve
-
-
-area panel
-    
-user interface
-
 
 
 ## Interface
@@ -850,7 +804,7 @@ function mc(img) {
 
 var comp = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
     .filterBounds(roiG)
-    .filterDate('2024-01-01', '2024-12-31')
+    .filterDate('2023-01-01', '2024-12-31')
     .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE', 20))
     .map(mc).median().clip(roiG);
 
@@ -966,7 +920,7 @@ print('Kappa:', cm.kappa());
 // summer, causing the annual composite to miss them.
 var migS2 = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
     .filterBounds(roiG)
-    .filterDate('2022-01-01', '2023-12-31')
+    .filterDate('2023-01-01', '2024-12-31')
     .filter(ee.Filter.or(
       ee.Filter.calendarRange(3, 5, 'month'),
       ee.Filter.calendarRange(8, 10, 'month')
@@ -1030,7 +984,7 @@ Export.image.toAsset({
 ```
 ::: 
 
-Large tidal-flat patches exceed GEE's connectedPixelCount size limit, preventing reliable area-based filtering. These were removed in QGIS where vector-based area calculation has no such constraint. The cleaned raster was re-uploaded for post-processing below.
+Large tidal-flat patches exceed GEE's connectedPixelCount size limit, preventing reliable area-based filtering. These were removed in QGIS where vector-based area calculation has no such constraint. Upload cleaned raster for post-processing.
 
 ::: {.scroll-code}
 ```javascript  
@@ -1131,7 +1085,7 @@ Export.image.toDrive({
 ```
 :::
 
-The final output is a spatial proxy. Limitations include reliance on a single composite period, cross-validation only (no field-validated roost data), and manual tidal-flat removal. Target users such as coastal management agencies typically hold authoritative land-use inventories that could replace the manual removal step with automated vector masking. The map is consumed by the interactive application as a static 2024 layer.
+The final output is a spatial proxy. Target users such as coastal management agencies typically hold authoritative land-use inventories that could replace the manual removal step with automated vector masking. The map is consumed by the interactive application as a static 2024 layer.
 
 ### Online application Part:
   analysis
@@ -1148,6 +1102,13 @@ Area was calculated by multiplying tidal flat pixels by pixel area and summing t
 
 A manually defined mask was applied to remove a small urban area where misclassification affected the visual change map. This mask was used only for visual refinement and did not alter the original area statistics.
 
+### Limitation:
+
+Tidal-flat classification accuracy varies across years due to sensor transitions between Landsat 8 and Sentinel-2. 
+
+Roost training samples are derived from OSM land-use labels which are not timestamped, creating potential mismatch with the 2023-2024 imagery. 
+
+Accuracy is assessed by cross-validation only, without field-verified roost observations.. Distance thresholds are adopted from flyway-level literature and may benefit from local calibration using satellite tracking data such as Chan et al. (2019). Large tidal-flat patches require manual removal in QGIS due to GEE pixel-count constraints.
 
 
 
