@@ -584,7 +584,7 @@ function buildLegend(title, colours, labels) {
 ui.root.clear();
 
 var map = ui.Map();
-map.centerObject(studyArea, 11);
+map.setCenter(119.26, 34.80, 12);
 map.setOptions('HYBRID');
 map.setControlVisibility({
   drawingToolsControl: false, layerList: true,
