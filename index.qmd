@@ -167,16 +167,7 @@ Mapping shorebird potential habitat requires mapping both feeding grounds (tidal
 
 Both layers are linked through distance computation and multi-year change detection in the interactive application.
 
-::: {style="text-align: center;"}
-![Figure1. Total Workflow](images/Group_4.svg){width="80%"}
-:::
-
-![Figure1. Total Workflow](images/Group_4.svg){width="80%" fig-align="center"}
-
-
-
-![Figure3. Tidal Flat Workflow](images/Group_2_2.svg){width="80%" fig-align="center"}
-
+![Figure1. Total Workflow](images/Group_4_cropped.svg){width="60%" fig-align="center"}
 
 ## Interface
 
@@ -579,11 +570,13 @@ fullDataPackage.aggregate_array('year').evaluate(function(years) {
 
 We then use the Murray Global Intertidal Dataset (v1.1 and v2) as a spatial baseline and refine it through elevation masking and morphological cleaning. Based on this, we dynamically expand candidate tidal flat areas by analysing pixel-wise inundation frequency, and apply a strict NDVI threshold to remove vegetated regions (NDVI < 0.2).
 
-Finally, we train a random forest classifier that integrates Canny edge density and near-infrared texture features to distinguish natural tidal flats from aquaculture ponds.
-
 ![Figure2. Tidal Flat Workflow](images/workflow_tidalflat_1.svg){width="60%" fig-align="center"}
 
-![Figure2. Tidal Flat Workflow](images/Group_1.svg){width="80%" fig-align="center"}
+Finally, we train a random forest classifier that integrates Canny edge density and near-infrared texture features to distinguish natural tidal flats from aquaculture ponds.
+
+![Figure3. Workflow for Intertidal Candidate Zone Identification ](images/Group_2_2.svg){width="80%" fig-align="center"}
+
+![Figure4. Multi-Feature Spectral Response & Discrimination Analysis](images/Group_1.svg){width="80%" fig-align="center"}
 
 ::: {.scroll-code}
 ```javascript
@@ -766,10 +759,9 @@ Map.addLayer(
 
 Roost identification uses a four-class suitability gradient: from managed pond embankments (pos_core) to built-up areas (neg_core), and is designed around roosting ecology. A Random Forest classifier (50 trees) operates within a physically constrained candidate area (DEM ≤ 10 m, NDVI ≤ 0.2, mNDWI < 0.75). A migration-season composite (spring March–May, autumn August–October) captures seasonally bare ground missed by the annual median.
 
-![Figure2. Roost Workflow](images/workflow_roost_2.svg){width="60%" fig-align="center"}
+![Figure5. Roost Workflow](images/workflow_roost_2.svg){width="60%" fig-align="center"}
 
-![Figure6. Tidal Flat Workflow](images/Group_3.svg){width="83%" fig-align="center"}
-
+![Figure6. Habitat suitability classification](images/Group_3.svg){width="83%" fig-align="center"}
 
 ::: {.scroll-code}
 ```javascript  
@@ -1104,15 +1096,17 @@ A manually defined mask was applied to remove a small urban area where misclassi
 
 ### Limitation:
 
-Tidal-flat classification accuracy varies across years due to sensor transitions between Landsat 8 and Sentinel-2. 
+1. Tidal-flat classification accuracy varies across years due to sensor transitions between Landsat 8 and Sentinel-2. 
 
-Roost training samples are derived from OSM land-use labels which are not timestamped, creating potential mismatch with the 2023-2024 imagery. 
+2. Roost training samples are derived from OSM land-use labels which are not timestamped, creating potential mismatch with the 2023-2024 imagery. 
 
-Accuracy is assessed by cross-validation only, without field-verified roost observations.. Distance thresholds are adopted from flyway-level literature and may benefit from local calibration using satellite tracking data such as Chan et al. (2019). Large tidal-flat patches require manual removal in QGIS due to GEE pixel-count constraints.
+3. Accuracy is assessed by cross-validation only, without field-verified roost observations.. Distance thresholds are adopted from flyway-level literature and may benefit from local calibration using satellite tracking data such as Chan et al. (2019). Large tidal-flat patches require manual removal in QGIS due to GEE pixel-count constraints.
+
+## Reference
+Li, X., Hou, X., Shan, K., Liu, Y., Song, Y., Wang, X., Du, P. and Fan, C. (2023) Identifying shorebird conservation hotspots and restoration gaps in stopover sites: A perspective of ‘ecologically linked’ habitats. Global Ecology and Conservation, 48, e02725. Available at: [Link](https://www.sciencedirect.com/science/article/pii/S2351989423003608)
+
+Zhang, K., Dong, X., Liu, Z., Gao, W., Hu, Z. and Wu, G. (2019) Mapping tidal flats with Landsat 8 images and Google Earth Engine: A case study of the China’s eastern coastal zone circa 2015. Remote Sensing, 11(8), 924. Available at: [Link](https://doi.org/10.3390/rs11080924)
 
 
-
-and math:
-$$ \Large t = {\frac{\overline{x_1}-\overline{x_2}} {\sqrt{\frac{s^2_1}{n_1} + \frac{s^2_2}{n_2}}}} $$
 
 
