@@ -2243,6 +2243,7 @@ map.onClick(function(coords) {
 
 // END — initial state shows "Ready to analyse"; no auto-run.
 
+```
 :::
 
 
