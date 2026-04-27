@@ -1091,6 +1091,18 @@ Area was calculated by multiplying tidal flat pixels by pixel area and summing t
 
 A manually defined mask was applied to remove a small urban area where misclassification affected the visual change map. This mask was used only for visual refinement and did not alter the original area statistics.
 
+
+
+
+
+::: {.scroll-code}
+```javascript  
+
+codehere
+
+:::
+
+
 ### Limitation:
 
 1. Tidal-flat classification accuracy varies across years due to sensor transitions between Landsat 8 and Sentinel-2. 
