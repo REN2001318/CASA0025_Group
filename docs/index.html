@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Lianyungang Blue Corridor: Estuarine Habitat Dynamics for Migratory Birds</title>
+<title>Lianyungang Blue Corridor: Estuarine Habitat Dynamics for Migratory Birds - Group name: SQLer</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -71,12 +71,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-1b3db88def35042d172274863c1cdcf0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-1b3db88def35042d172274863c1cdcf0.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-4c7b890cc350be7067044af900615741.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4c7b890cc350be7067044af900615741.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-78b3671aa5f9f683ec246af2dde1230f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-2f0c69e010e3da93992838767758ef7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-3e6c1baec064a38abb7800f19e666a87.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-79c4d32b32b00c7e91290ed5a6655f4a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -284,7 +284,7 @@ background-size: cover;
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Lianyungang Blue Corridor: Estuarine Habitat Dynamics for Migratory Birds</h1>
+      <h1 class="title">Lianyungang Blue Corridor: Estuarine Habitat Dynamics for Migratory Birds - Group name: SQLer</h1>
                       </div>
   </div>
     
@@ -528,8 +528,6 @@ Waterway lines + buffer → permanent water body mask
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><img src="images/01.png" class="img-fluid" style="width:100.0%"></p>
-</div><div class="column" style="width:50%;">
-<p><img src="images/02.png" class="img-fluid" style="width:100.0%"></p>
 </div>
 </div>
 <section id="accessibility-module" class="level3">
@@ -1451,13 +1449,241 @@ Waterway lines + buffer → permanent water body mask
 </section>
 <section id="online-application-part" class="level3">
 <h3 class="anchored" data-anchor-id="online-application-part">Online application Part:</h3>
-<p>analysis 1.Raster assets are loaded(selected year) 2.cleaned against JRC Global Surface Water (occurrence &gt; 95%) to remove permanent water bodies 3.masked to eliminate spatial overlap 4.for conservation prioritisation: literature-derived thresholds (distance) + area statistics (km²) are computed to quantify the proportion of habitat falling within each accessibility tier. User interface: 5. Tidal flat area change and gain/loss mapping</p>
-<p>Tidal flat change was analysed using classified raster outputs from three time periods: 2014–2015, 2019, and 2024. Each raster was converted into a binary mask, where tidal flat pixels were assigned a value of 1 and non-tidal pixels were assigned a value of 0.</p>
-<p>Area was calculated by multiplying tidal flat pixels by pixel area and summing the result across the study area. Temporal change was calculated by subtracting earlier raster layers from later ones. In the change maps, positive values represent tidal flat gain, negative values represent tidal flat loss, and zero values represent no change.</p>
-<p>A manually defined mask was applied to remove a small urban area where misclassification affected the visual change map. This mask was used only for visual refinement and did not alter the original area statistics.</p>
+<p>The Accessibility module loads precomputed tidal-flat and roost rasters, removes permanent water bodies (JRC occurrence &gt; 95 %) from roost pixels, and masks any tidal-flat overlap. It then computes the distance from every tidal-flat pixel to its nearest roost and, conversely, from every roost pixel to its nearest tidal flat. Three default thresholds 1.7 / 2.8 / 6.2 km following following Li et al.&nbsp;2023, Classify both layers into different optimal level tiers; grouped area statistics update accordingly. The Change module compares binary tidal-flat masks for any two years between 2014 and 2024, mapping stable, gained and lost pixels with per-class area summaries.</p>
 <div class="scroll-code">
 <p>```javascript</p>
-<p>codehere</p>
+<p>// Here using the code modified for generating application (including UI) // ============================================================================= // Shorebird Habitat Assessment — Blue Corridor // 01 Habitat Accessibility — sketch-based redesign // Lianyungang Coastal Wetland · Jiangsu · China // =============================================================================</p>
+<p>// ———- 1. CONFIG (unchanged) ——————————————</p>
+<p>var CONFIG = { studyArea: ‘projects/ee-summerxxxa99/assets/LYG_Final’, roostAsset: ‘projects/ee-summerxxxa99/assets/roost_30m_2024_new’, tidalPrefix: ‘projects/ee-summerxxxa99/assets/tidalflat_all/TidalFlat_’, tidalSuffix: ’‘, referenceYear: ’2024’, availableYears: [ ‘2014’,‘2015’,‘2016’,‘2017’,‘2018’,‘2019’, ‘2020’,‘2021’,‘2022’,‘2023’,‘2024’ ], scale: 100, maxDistPx: 256, crs: ‘EPSG:4326’, defaultT1: 1.7, defaultT2: 2.8, defaultT3: 6.2, // Slider ceiling for each threshold (used by gauges too) maxT1: 5, maxT2: 10, maxT3: 12 };</p>
+<p>// ———- 2. STYLE TOKENS ————————————————-</p>
+<p>var COLOR = { ocean: ‘#3c91e6’, oceanLight: ‘#7ab7e8’, oceanDark: ‘#2a73c0’, green: ‘#9fd356’, greenDark: ‘#7eb53a’, coral: ‘#fa824c’, coralDark: ‘#e36636’, yellow: ‘#f5c84a’, shadow: ‘#342e37’, porcelain: ‘#fafffd’, bg: ‘#f3f6f5’, card: ‘#ffffff’, text: ‘#2a2630’, textSoft: ‘#5b5566’, textMute: ‘#8a8395’, line: ‘#e6eaec’, lineStrong: ‘#cdd5dc’, grey: ‘#9aa6b1’ };</p>
+<p>var STYLE = {</p>
+<p>// ———- Branding ———- brandEyebrow: { fontSize: ‘19px’, fontWeight: ‘bold’, color: ‘#083D77’, margin: ‘0 0 4px 14px’, padding: ‘0’, backgroundColor: COLOR.bg },</p>
+<p>brandTitle: { fontSize: ‘20px’, fontWeight: ‘bold’, color: ‘#083D77’, margin: ‘0 0 4px 14px’, padding: ‘0’, whiteSpace: ‘wrap’, backgroundColor: COLOR.bg },</p>
+<p>brandPlace: { fontSize: ‘11px’, fontWeight: ‘bold’, color: ‘#F95738’, margin: ‘0 0 12px 14px’, padding: ‘0’, backgroundColor: COLOR.bg },</p>
+<p>// ———- Section labels ———- sectionLabel: { fontSize: ‘10px’, fontWeight: ‘bold’, color: COLOR.textMute, margin: ‘14px 0 6px 0’, padding: ‘0’ },</p>
+<p>// ———- Cards ———- card: { backgroundColor: COLOR.card, border: ‘1px solid’ + COLOR.line, padding: ‘14px 16px’, margin: ‘0 0 6px 0’, borderRadius: ‘13px’ },</p>
+<p>cardTitle: { fontSize: ‘13px’, fontWeight: ‘bold’, color: COLOR.shadow, margin: ‘0 0 4px 0’, padding: ‘0’ },</p>
+<p>cardHint: { fontSize: ‘10.5px’, color: COLOR.textMute, margin: ‘0 0 10px 0’, padding: ‘0’, whiteSpace: ‘wrap’ },</p>
+<p>// ———- Tabs ———- tab: { backgroundColor: COLOR.card, color: COLOR.text, fontSize: ‘11px’, padding: ‘6px 6px’, margin: ‘0 2px 0 0’, stretch: ‘horizontal’, borderRadius: ‘4px’ },</p>
+<p>tabActive: { backgroundColor: ‘#BBDEF0’, // the frame color of ‘EXPLORATION MODULE’ color: ‘#083D77’, fontWeight: ‘bold’, fontSize: ‘11px’, padding: ‘3px 3px’, margin: ‘0 8px 0 8px’, stretch: ‘horizontal’, borderRadius: ‘4px’ },</p>
+<p>// ———- Gauges ———- gaugePanel: { margin: ‘0 4px’, padding: ‘0’, width: ‘190px’ },</p>
+<p>gaugeLabel: { fontSize: ‘10.5px’, fontWeight: ‘bold’, color: COLOR.shadow, textAlign: ‘center’, margin: ‘2px 0 0 0’, padding: ‘0’, stretch: ‘horizontal’ },</p>
+<p>slider: { stretch: ‘horizontal’, margin: ‘0 0 4px 0’ },</p>
+<p>// ———- Buttons ———- btnPrimary: { backgroundColor: ‘#083D77’, color: ‘#083D77’, fontWeight: ‘bold’, fontSize: ‘12px’, padding: ‘12px 24px’, margin: ‘12px 0 4px 0’, stretch: ‘horizontal’, borderRadius: ‘12px’ },</p>
+<p>// ———- Dropdown ———- caption: { fontSize: ‘11.5px’, color: COLOR.shadow, fontWeight: ‘bold’, margin: ‘6px 0 2px 0’, padding: ‘0’ },</p>
+<p>select: { stretch: ‘horizontal’, margin: ‘0 0 6px 0’ },</p>
+<p>// ———- Results ———- subHeader: { fontSize: ‘12px’, fontWeight: ‘bold’, color: COLOR.ocean, margin: ‘10px 0 6px 0’, padding: ‘0’, stretch: ‘horizontal’ },</p>
+<p>classRow: { fontSize: ‘11px’, color: COLOR.textSoft, margin: ‘2px 0’, padding: ‘0’ },</p>
+<p>classDot: function(c) { return { backgroundColor: c, padding: ‘5px 9px’, margin: ‘3px 6px 3px 0’, border: ‘1px solid’ + COLOR.line }; },</p>
+<p>totalLabel: { fontSize: ‘13px’, color:‘#083D77’, fontWeight: ‘bold’, margin: ‘20px 0 0 0’, padding: ‘0’ },</p>
+<p>emptyTitle: { fontSize: ‘13px’, fontWeight: ‘bold’, color: COLOR.shadow, margin: ‘2px 0 4px 0’, padding: ‘0’ },</p>
+<p>emptyState: { fontSize: ‘12px’, color: COLOR.textMute, margin: ‘0 0 4px 0’, padding: ‘0’, whiteSpace: ‘wrap’ },</p>
+<p>resultRow: { fontSize: ‘11.5px’, color: ‘#8C8C8C’, margin: ‘1px 0’, padding: ‘0’ },</p>
+<p>resultGood: { fontSize: ‘11.5px’, color: ‘#2EC4B6’, fontWeight: ‘bold’, margin: ‘1px 0’, padding: ‘0’ },</p>
+<p>resultBad: { fontSize: ‘11.5px’, color: ‘#FF595E’, fontWeight: ‘bold’, margin: ‘1px 0’, padding: ‘0’ },</p>
+<p>resultEm: { fontSize: ‘12px’, fontWeight: ‘bold’, color: COLOR.shadow, margin: ‘4px 0’, padding: ‘0’ },</p>
+<p>// ———- Inspector ———- inspectorPanel: { position: ‘bottom-right’, padding: ‘10px 14px’, width: ‘270px’, backgroundColor: COLOR.porcelain, border: ‘1px solid’ + COLOR.line, margin: ‘0 12px 12px 0’ },</p>
+<p>inspectorTitle: { fontSize: ‘11px’, fontWeight: ‘bold’, color: COLOR.textMute, margin: ‘0 0 6px 0’, padding: ‘0’ },</p>
+<p>inspectorBody: { fontSize: ‘11px’, color: COLOR.textSoft, margin: ‘0’, padding: ‘0’, whiteSpace: ‘wrap’ }</p>
+<p>};</p>
+<p>// ———- 3. DATA LOADING (unchanged) ————————————-</p>
+<p>var studyArea = ee.FeatureCollection(CONFIG.studyArea).geometry();</p>
+<p>function loadTidalFlat(year) { var id = CONFIG.tidalPrefix + year + CONFIG.tidalSuffix; return ee.Image(id).select(0).eq(1).selfMask().clip(studyArea); }</p>
+<p>var tidalRef = loadTidalFlat(CONFIG.referenceYear);</p>
+<p>var roostRaw = ee.Image(CONFIG.roostAsset).select(0).eq(1).selfMask();</p>
+<p>var permWater = ee.Image(‘JRC/GSW1_4/GlobalSurfaceWater’) .select(‘occurrence’).gt(95);</p>
+<p>var roost = roostRaw .updateMask(permWater.not()) .updateMask(tidalRef.unmask(0).not()) .clip(studyArea);</p>
+<p>// ———- 4. DISTANCE RASTERS (lazy) ————————————–</p>
+<p>function computeDistToRoost() { return roost .fastDistanceTransform(CONFIG.maxDistPx).sqrt() .multiply(ee.Image.pixelArea().sqrt()) .reproject({crs: CONFIG.crs, scale: CONFIG.scale}); } function computeDistToTidal() { return tidalRef .fastDistanceTransform(CONFIG.maxDistPx).sqrt() .multiply(ee.Image.pixelArea().sqrt()) .reproject({crs: CONFIG.crs, scale: CONFIG.scale}); }</p>
+<p>// ———- 5. UI HELPERS —————————————————</p>
+<p>function makeDivider(extra) { return ui.Panel({style: { height: ‘1px’, backgroundColor: COLOR.line, margin: extra || ‘8px 0’, stretch: ‘horizontal’ }}); }</p>
+<p>function sectionLabel(text) { return ui.Label(text.toUpperCase(), STYLE.sectionLabel); }</p>
+<p>function card(widgets) { var p = ui.Panel({style: STYLE.card}); for (var i = 0; i &lt; widgets.length; i++) p.add(widgets[i]); return p; }</p>
+<p>function clearLayers() { var layers = map.layers(); while (layers.length() &gt; BASE_LAYER_N) { layers.remove(layers.get(layers.length() - 1)); } }</p>
+<p>function groupedArea(classImage, callback) { var areaImg = ee.Image.pixelArea() .addBands(classImage.rename(‘cls’)); var stats = areaImg.reduceRegion({ reducer: ee.Reducer.sum().group({groupField: 1}), geometry: studyArea, scale: CONFIG.scale, maxPixels: 1e9 }); stats.evaluate(function(result) { var out = {}; if (result &amp;&amp; result.groups) { result.groups.forEach(function(g) { out[g.group] = g.sum / 1e6; }); } callback(out); }); }</p>
+<p>/** Donut chart for the Scenario Summary blocks */ function makeDonut(names, values, colours) { var data = [[‘Class’, ‘Area’]]; for (var i = 0; i &lt; names.length; i++) data.push([names[i], values[i]]); return ui.Chart(data) .setChartType(‘PieChart’) .setOptions({ colors: colours, pieHole: 0.55, legend: {position: ‘none’}, pieSliceText: ‘percentage’, pieSliceTextStyle: {color: ‘#ffffff’, fontSize: 10, bold: true}, backgroundColor: COLOR.card, width: 200, height: 180, chartArea: {left: 4, top: 4, width: ‘96%’, height: ‘90%’}, fontName: ‘Roboto’ }); }</p>
+<p>/** Bar chart for the Scenario Summary blocks */ function makeBarChart(names, values, colours) { var data = [[‘Class’, ‘Area’, {role: ‘style’}]];</p>
+<p>for (var i = 0; i &lt; names.length; i++) { data.push([names[i], values[i], ‘color:’ + colours[i]]); }</p>
+<p>return ui.Chart(data) .setChartType(‘ColumnChart’) .setOptions({ backgroundColor: COLOR.card, width: 420, height: 240, legend: {position: ‘none’}, chartArea: {left: 55, top: 20, width: ‘78%’, height: ‘70%’}, hAxis: { textStyle: {fontSize: 11, bold: true, color: ‘#083D77’} }, vAxis: { title: ‘Area (km²)’, titleTextStyle: {italic: false, fontSize: 11}, textStyle: {fontSize: 10}, gridlines: {color: ‘#E5E7EB’} }, bar: {groupWidth: ‘58%’} }); }</p>
+<p>/** Number + colored fill that sits flush against the slider below */ function makeIntegratedMeter(value, maxVal, color) {</p>
+<p>var TOTAL_W = METER_W; // ← 和 slider 一致 var fillW = Math.max(2, Math.round((value / maxVal) * TOTAL_W)); var restW = Math.max(0, TOTAL_W - fillW);</p>
+<p>var bigNum = ui.Label(value.toFixed(1) + ’ km’, { fontSize: ‘18px’, fontWeight: ‘bold’, color: color, textAlign: ‘center’, margin: ‘4px 0 4px 0’, padding: ‘0’, width: TOTAL_W + ‘px’ });</p>
+<p>var bar = ui.Panel({ widgets: [ ui.Label(’‘, { backgroundColor: color, width: fillW + ’px’, height: ‘8px’, margin: ‘0’, padding: ‘0’ }), ui.Label(’‘, { backgroundColor: COLOR.line, width: restW + ’px’, height: ‘8px’, margin: ‘0’, padding: ‘0’ }) ], layout: ui.Panel.Layout.Flow(‘horizontal’), style: { width: TOTAL_W + ‘px’, padding: ‘0’, margin: ‘0’ } });</p>
+<p>return ui.Panel({ widgets: [bigNum, bar], style: { width: TOTAL_W + ‘px’, padding: ‘0’, margin: ‘0’ } }); }</p>
+<p>/** Render a class-breakdown row: colour dot + label + value */ function classRow(colour, range, name, value) { return ui.Panel({ widgets: [ ui.Label(’‘, STYLE.classDot(colour)), ui.Label(range +’ · ’ + name, { fontSize: ‘11px’, color: COLOR.shadow, margin: ‘4px 6px 4px 0’, padding: ‘0’, stretch: ‘horizontal’ }), ui.Label(value.toFixed(2) + ’ km²’, { fontSize: ‘11px’, fontWeight: ‘bold’, color: COLOR.shadow, margin: ‘4px 0’, padding: ‘0’, textAlign: ‘right’ }) ], layout: ui.Panel.Layout.Flow(‘horizontal’), style: {stretch: ‘horizontal’, padding: ‘0’, margin: ‘0’} }); }</p>
+<p>/** Two-column block: class breakdown list (left) + donut (right) */ function summaryBlock(headerText, names, ranges, values, colours, totalLabel) { var leftCol = ui.Panel({ style: {width: ‘270px’, padding: ‘0’, margin: ‘0 8px 0 0’} }); for (var i = 0; i &lt; names.length; i++) { leftCol.add(classRow(colours[i], ranges[i], names[i], values[i])); } var total = values.reduce(function(a,b){return a+b;},0); leftCol.add( ui.Panel({ widgets: [</p>
+<pre><code>    ui.Label(totalLabel + ': ', {
+      fontSize: '13px',
+      fontWeight: 'bold',
+      color: '#083D77',
+      margin: '0',
+      padding: '0'
+    }),
+
+    ui.Label(total.toFixed(2) + ' km²', {
+      fontSize: '13px',
+      fontWeight: 'bold',
+      color: '#F95738',
+      margin: '0',
+      padding: '0'
+    })
+
+  ],
+  layout: ui.Panel.Layout.Flow('horizontal'),
+  style: {
+    margin: '20px 0 0 0',
+    padding: '0'
+  }
+})</code></pre>
+<p>);</p>
+<p>var rightCol = ui.Panel({ widgets: [makeDonut(names, values, colours)], style: {padding: ‘0’, margin: ‘0’} });</p>
+<p>var block = ui.Panel({ style: {stretch: ‘horizontal’, padding: ‘0’, margin: ‘4px 0 8px 0’} }); block.add(ui.Label(headerText, STYLE.subHeader)); block.add(ui.Panel({ widgets: [leftCol, rightCol], layout: ui.Panel.Layout.Flow(‘horizontal’), style: {stretch: ‘horizontal’, padding: ‘0’, margin: ‘0’} })); return block; }</p>
+<p>function buildLegend(title, colours, labels) { legendPanel.clear(); legendPanel.add(ui.Label(title, STYLE.cardTitle)); for (var i = 0; i &lt; colours.length; i++) { legendPanel.add(ui.Panel({ widgets: [ ui.Label(’‘, { backgroundColor: colours[i], padding: ’7px 24px’, margin: ‘2px 8px 2px 0’, border: ‘1px solid’ + COLOR.line }), ui.Label(labels[i], { fontSize: ‘11px’, color: COLOR.textSoft, margin: ‘4px 0’, padding: ‘0’ }) ], layout: ui.Panel.Layout.Flow(‘horizontal’), style: {padding: ‘0’, margin: ‘0’} })); } }</p>
+<p>// ———- 6. UI FRAMEWORK ————————————————-</p>
+<p>ui.root.clear();</p>
+<p>var map = ui.Map(); map.setCenter(119.26, 34.80, 12); map.setOptions(‘HYBRID’); map.setControlVisibility({ drawingToolsControl: false, layerList: true, zoomControl: true, scaleControl: true, mapTypeControl: false, fullscreenControl: true });</p>
+<p>var BASE_LAYER_N = 0;</p>
+<p>// Wider sidebar to fit 3 gauges in a row var ctrlPanel = ui.Panel({ style: { width: ‘680px’, padding: ‘20px 18px 20px 20px’, backgroundColor: COLOR.bg } });</p>
+<p>// — Title block (Blue Corridor branding) ctrlPanel.add(ui.Label(‘BLUE CORRIDOR:’, STYLE.brandEyebrow)); ctrlPanel.add(ui.Label( ‘Estuarine Habitat Dynamics for Migratory Birds’, STYLE.brandTitle)); ctrlPanel.add(ui.Label( ‘Lianyungang Coastal Wetland · Jiangsu · China’, STYLE.brandPlace));</p>
+<p>ctrlPanel.add(makeDivider(‘4px 0 12px 0’));</p>
+<p>// — Module tabs (3 buttons, active state highlighted)</p>
+<p>var modeBtns = {}; function setActiveMode(mode) { modeBtns.proximity.style().set(mode === ‘proximity’ ? STYLE.tabActive : STYLE.tab); modeBtns.change.style().set(mode === ‘change’ ? STYLE.tabActive : STYLE.tab);</p>
+<p>proxPanel.style().set(‘shown’, mode === ‘proximity’); chgPanel.style().set(‘shown’, mode === ‘change’);</p>
+<p>clearLayers();</p>
+<p>resultsPanel.clear(); resultsPanel.add(ui.Label(‘Ready to analyse.’, STYLE.emptyTitle)); resultsPanel.add(ui.Label( ‘Select a module and run analysis.’, STYLE.emptyState ));</p>
+<p>legendPanel.clear(); legendPanel.add(ui.Label( ‘Legend appears here once an analysis is run.’, STYLE.emptyState )); }</p>
+<p>modeBtns.proximity = ui.Button({ label: ‘01 ACCESSIBILITY’, onClick: function() { setActiveMode(‘proximity’); }, style: STYLE.tabActive }); modeBtns.change = ui.Button({ label: ‘02 CHANGE OVER TIME’, onClick: function() { setActiveMode(‘change’); }, style: STYLE.tab });</p>
+<p>ctrlPanel.add(ui.Panel({ widgets: [</p>
+<pre><code>ui.Label('EXPLORATION MODULE', {
+  fontSize: '13px',
+  fontWeight: 'bold',
+  color: COLOR.shadow,
+  margin: '0 0 12px 0',
+  padding: '0'
+}),
+
+ui.Panel({
+  widgets: [modeBtns.proximity, modeBtns.change],
+  layout: ui.Panel.Layout.Flow('horizontal'),
+  style: {
+    stretch: 'horizontal',
+    padding: '0',
+    margin: '0'
+  }
+})</code></pre>
+<p>],</p>
+<p>style: { stretch: ‘horizontal’, padding: ‘16px’, margin: ‘0 0 12px 0’, backgroundColor: COLOR.card, border: ‘1px solid’ + COLOR.line, borderRadius: ‘12px’ }</p>
+<p>}));</p>
+<p>// ———- 6A. PROXIMITY PANEL — gauge-style thresholds ——————- var METER_W = 120; // 色带宽度 var SLIDER_W = 190; // slider 总宽度，包含右侧数值区域</p>
+<p>var SLIDER_STYLE = { width: SLIDER_W + ‘px’, margin: ‘-12px 0 2px 0’, fontSize: ‘0px’, color: COLOR.porcelain };</p>
+<p>var rowT1 = {slider: ui.Slider({ min: 0.5, max: CONFIG.maxT1, value: CONFIG.defaultT1, step: 0.1, style: SLIDER_STYLE })};</p>
+<p>var rowT2 = {slider: ui.Slider({ min: 0.5, max: CONFIG.maxT2, value: CONFIG.defaultT2, step: 0.1, style: SLIDER_STYLE })};</p>
+<p>var rowT3 = {slider: ui.Slider({ min: 1.0, max: CONFIG.maxT3, value: CONFIG.defaultT3, step: 0.2, style: SLIDER_STYLE })};</p>
+<p>// Gauge containers — chart is at index 0 of each, swapped on slider change var gauge1Panel = ui.Panel({style: STYLE.gaugePanel}); var gauge2Panel = ui.Panel({style: STYLE.gaugePanel}); var gauge3Panel = ui.Panel({style: STYLE.gaugePanel});</p>
+<p>gauge1Panel.add(makeIntegratedMeter(CONFIG.defaultT1, CONFIG.maxT1, ‘#F07167’)); gauge1Panel.add(rowT1.slider); gauge1Panel.add(ui.Label(‘Optimal threshold (km)’, STYLE.gaugeLabel));</p>
+<p>gauge2Panel.add(makeIntegratedMeter(CONFIG.defaultT2, CONFIG.maxT2, ‘#00AFB9’)); gauge2Panel.add(rowT2.slider); gauge2Panel.add(ui.Label(‘Sub-optimal threshold (km)’, STYLE.gaugeLabel));</p>
+<p>gauge3Panel.add(makeIntegratedMeter(CONFIG.defaultT3, CONFIG.maxT3, ‘#0081A7’)); gauge3Panel.add(rowT3.slider); gauge3Panel.add(ui.Label(‘Marginal threshold (km)’, STYLE.gaugeLabel));</p>
+<p>// Live-update each gauge when its slider changes rowT1.slider.onChange(function(v) { gauge1Panel.widgets().set(0, makeIntegratedMeter(v, CONFIG.maxT1, ‘#F07167’)); });</p>
+<p>rowT2.slider.onChange(function(v) { gauge2Panel.widgets().set(0, makeIntegratedMeter(v, CONFIG.maxT2, ‘#00AFB9’)); });</p>
+<p>rowT3.slider.onChange(function(v) { gauge3Panel.widgets().set(0, makeIntegratedMeter(v, CONFIG.maxT3, ‘#0081A7’)); });</p>
+<p>var gaugesRow = ui.Panel({ widgets: [gauge1Panel, gauge2Panel, gauge3Panel], layout: ui.Panel.Layout.Flow(‘horizontal’), style: {stretch: ‘horizontal’, padding: ‘0’, margin: ‘10px 0 0 0’} });</p>
+<p>var btnProximity = ui.Button({ label: ’ ▶ Genetrate Scenario’, style: { backgroundColor: ‘#ffffff’, color: ‘#083D77’, fontWeight: ‘bold’, fontSize: ‘12px’, padding: ‘10px 24px’, margin: ‘24px 0 4px 0’, stretch: ‘horizontal’, border: ‘0px’ } });</p>
+<p>var proxPanel = card([ ui.Label(‘Ecological Movement Thresholds’, STYLE.cardTitle), ui.Label( ‘Adjust the gauges to test how movement-distance assumptions’ + ‘reshape the habitat-accessibility classification.’, STYLE.cardHint ), gaugesRow, btnProximity]); ctrlPanel.add(proxPanel);</p>
+<p>// ———- 6B. CHANGE PANEL (kept from previous redesign) —————–</p>
+<p>var dropA = { caption: ui.Label(‘Baseline year’, STYLE.caption), select: ui.Select({items: CONFIG.availableYears, value: CONFIG.availableYears[0], style: STYLE.select}) }; var dropB = { caption: ui.Label(‘Comparison year’, STYLE.caption), select: ui.Select({items: CONFIG.availableYears, value: CONFIG.availableYears[CONFIG.availableYears.length-1], style: STYLE.select}) };</p>
+<p>var btnChange = ui.Button({ label: ‘▶ Detect Habitat Change’, style: { backgroundColor: ‘#ffffff’, color: ‘#083D77’, fontWeight: ‘bold’, fontSize: ‘12px’, padding: ‘10px 24px’, margin: ‘24px 0 4px 0’, stretch: ‘horizontal’, border: ‘0px’ } }); // ← 这里结束 btnChange</p>
+<p>var chgPanel = card([ ui.Label(‘Compare Habitat Extent Over Time’, STYLE.cardTitle), ui.Label( ‘Choose a baseline year and a comparison year. The map will reveal’ + ‘stable, newly gained, and lost tidal-flat areas.’, STYLE.cardHint), ui.Panel({ widgets: [ ui.Panel({ widgets: [dropA.caption, dropA.select], style: { width: ‘45%’, margin: ‘0 50px 0 0’, padding: ‘0’ } }), ui.Panel({ widgets: [dropB.caption, dropB.select], style: { width: ‘45%’, margin: ‘0’, padding: ‘0’ } }) ], layout: ui.Panel.Layout.Flow(‘horizontal’), style: { stretch: ‘horizontal’, margin: ‘8px 6 12px 6’, padding: ‘0’ } }), btnChange]); chgPanel.style().set(‘shown’, false); ctrlPanel.add(chgPanel);</p>
+<p>// ———- 6D. SCENARIO SUMMARY ——————————————-</p>
+<p>var resultsPanel = ui.Panel({ widgets: [ ui.Label(‘SCENARIO SUMMARY’, { fontSize: ‘13px’, fontWeight: ‘bold’, color: COLOR.shadow, margin: ‘0 0 12px 0’, padding: ‘0’ }) ], style: STYLE.card });</p>
+<p>ctrlPanel.add(resultsPanel);</p>
+<p>// ———- 6E. DYNAMIC LEGEND ———————————————</p>
+<p>var legendPanel = ui.Panel({ widgets: [ ui.Label(‘DYNAMIC LEGEND’, { fontSize: ‘13px’, fontWeight: ‘bold’, color: COLOR.shadow, margin: ‘0 0 12px 0’, padding: ‘0’ }) ], style: STYLE.card });</p>
+<p>ctrlPanel.add(legendPanel);</p>
+<p>// ———- 6F. INITIAL EMPTY STATE —————————————-</p>
+<p>resultsPanel.add(ui.Label(‘Ready to analyse.’, STYLE.emptyTitle)); resultsPanel.add(ui.Label( ‘Select a module and run analysis.’, STYLE.emptyState));</p>
+<p>legendPanel.add(ui.Label( ‘Legend appears here once an analysis is run.’, STYLE.emptyState));</p>
+<p>// ———- 7. LAYOUT ——————————————————-</p>
+<p>ui.root.add(ui.SplitPanel({ firstPanel: ctrlPanel, secondPanel: map, orientation: ‘horizontal’, wipe: false }));</p>
+<p>// ———- 9A. PROXIMITY ANALYSIS (logic unchanged, output redesigned) —-</p>
+<p>btnProximity.onClick(function() {</p>
+<p>var distToRoost = computeDistToRoost(); var distToTidal = computeDistToTidal();</p>
+<p>var t1 = rowT1.slider.getValue() * 1000; var t2 = rowT2.slider.getValue() * 1000; var t3 = rowT3.slider.getValue() * 1000; t2 = Math.max(t2, t1 + 100); t3 = Math.max(t3, t2 + 100);</p>
+<p>var tidalClass = ee.Image.constant(4) .where(distToRoost.lte(t3), 3) .where(distToRoost.lte(t2), 2) .where(distToRoost.lte(t1), 1) .updateMask(tidalRef) .clip(studyArea);</p>
+<p>var roostClass = ee.Image.constant(4) .where(distToTidal.lte(t3), 3) .where(distToTidal.lte(t2), 2) .where(distToTidal.lte(t1), 1) .updateMask(roost) .clip(studyArea);</p>
+<p>clearLayers();</p>
+<p>var tidalPal = [‘#0B3C5D’,‘#328CC1’,‘#7FB3D5’,‘#D9EAF4’]; var roostPal = [‘#1B5E20’,‘#43A047’,‘#A5D6A7’,‘#E8F5E9’];</p>
+<p>map.addLayer(tidalClass, {min: 1, max: 4, palette: tidalPal}, ‘Tidal flat — distance to nearest roost’); map.addLayer(roostClass, {min: 1, max: 4, palette: roostPal}, ‘Roost — distance to nearest feeding’);</p>
+<p>// Class range strings for the breakdown rows var t1km = (t1/1000).toFixed(1), t2km = (t2/1000).toFixed(1), t3km = (t3/1000).toFixed(1); var ranges = [ ‘&lt;’ + t1km + ’ km’, t1km + ‘–’ + t2km + ’ km’, t2km + ‘–’ + t3km + ’ km’, ‘&gt;’ + t3km + ’ km’ ]; var classNames = [‘Optimal’, ‘Sub-optimal’, ‘Marginal’, ‘Beyond range’];</p>
+<p>resultsPanel.clear(); resultsPanel.add(ui.Label(‘Habitat Accessibility’, STYLE.cardTitle)); resultsPanel.add(ui.Label( ‘Thresholds:’ + t1km + ’ / ’ + t2km + ’ / ’ + t3km + ’ km’, STYLE.cardHint)); resultsPanel.add(ui.Label(‘Computing area statistics …’, STYLE.emptyState));</p>
+<p>groupedArea(tidalClass, function(tAreas) {</p>
+<pre><code>var tVals = [];
+for (var i = 1; i &lt;= 4; i++) tVals.push(tAreas[i] || 0);
+
+groupedArea(roostClass, function(rAreas) {
+
+  var rVals = [];
+  for (var j = 1; j &lt;= 4; j++) rVals.push(rAreas[j] || 0);
+
+  // Rebuild results panel with both sub-blocks
+  resultsPanel.clear();
+  resultsPanel.add(ui.Label('Habitat Accessibility', STYLE.cardTitle));
+  resultsPanel.add(ui.Label(
+    'Thresholds: ' + t1km + ' / ' + t2km + ' / ' + t3km + ' km',
+    STYLE.cardHint));
+
+  // Block 1 — Feeding habitat accessibility
+  resultsPanel.add(summaryBlock(
+    'Feeding Habitat Accessibility',
+    classNames, ranges, tVals, tidalPal,
+    'Feeding habitat'));
+
+  resultsPanel.add(makeDivider('6px 0'));
+
+  // Block 2 — Roost-feeding connectivity
+  resultsPanel.add(summaryBlock(
+    'Roost-Feeding Connectivity',
+    classNames, ranges, rVals, roostPal,
+    'Roost area'));
+});</code></pre>
+<p>});</p>
+<p>// Dynamic legend buildLegend( ‘Habitat Accessibility Classes’, tidalPal.concat(roostPal), [ ‘Tidal · Optimal’, ‘Tidal · Sub-optimal’, ‘Tidal · Marginal’, ‘Tidal · Beyond range’,</p>
+<pre><code>  'Roost · Optimal',
+  'Roost · Sub-optimal',
+  'Roost · Marginal',
+  'Roost · Beyond range'
+]</code></pre>
+<p>); });</p>
+<p>// ———- 9B. CHANGE ANALYSIS (logic unchanged) ————————–</p>
+<p>btnChange.onClick(function() { resultsPanel.clear(); resultsPanel.add(ui.Label(‘Temporal Habitat Change’, STYLE.cardTitle)); resultsPanel.add(ui.Label( ‘Analysing habitat change…’, STYLE.emptyState ));</p>
+<p>clearLayers();</p>
+<p>ui.util.setTimeout(function() { var yA = dropA.select.getValue(); var yB = dropB.select.getValue();</p>
+<p>if (yA === yB) { resultsPanel.clear(); resultsPanel.add(ui.Label(‘Temporal Habitat Change’, STYLE.cardTitle)); resultsPanel.add(ui.Label(‘Please select two different years.’, {fontSize: ‘12px’, color: COLOR.coralDark, fontWeight: ‘bold’, margin: ‘4px 0’, padding: ‘0’})); return; } if (Number(yA) &gt; Number(yB)) { var tmp = yA; yA = yB; yB = tmp; }</p>
+<p>var tfA = loadTidalFlat(yA).unmask(0); var tfB = loadTidalFlat(yB).unmask(0);</p>
+<p>var changeImg = ee.Image.constant(0) .where(tfA.eq(1).and(tfB.eq(1)), 1) .where(tfA.eq(0).and(tfB.eq(1)), 2) .where(tfA.eq(1).and(tfB.eq(0)), 3) .selfMask().clip(studyArea);</p>
+<p>clearLayers(); var chgPal = [‘#DDDDDD’, ‘#2EC4B6’, ‘#FF595E’]; map.addLayer(changeImg, {min:1,max:3,palette:chgPal}, ‘Tidal-flat change’ + yA + ’ → ’ + yB); map.addLayer(loadTidalFlat(yA), {palette:[COLOR.oceanLight]}, ‘Tidal flat’ + yA, false); map.addLayer(loadTidalFlat(yB), {palette:[COLOR.ocean]}, ‘Tidal flat’ + yB, false);</p>
+<p>resultsPanel.clear(); resultsPanel.add(ui.Label(‘Temporal Habitat Change’, STYLE.cardTitle)); resultsPanel.add(ui.Label(‘Rendering change map …’, STYLE.emptyState));</p>
+<p>groupedArea(changeImg, function(areas) { var stable = areas[1] || 0, gain = areas[2] || 0, loss = areas[3] || 0; var totA = stable + loss, totB = stable + gain; var net = gain - loss, pct = totA &gt; 0 ? (net / totA) * 100 : 0;</p>
+<pre><code>resultsPanel.clear();
+resultsPanel.add(ui.Label('Temporal Habitat Change', STYLE.cardTitle));
+resultsPanel.add(ui.Label(yA + '  →  ' + yB, STYLE.cardHint));
+resultsPanel.add(ui.Label('Tidal-flat extent', STYLE.subHeader));
+resultsPanel.add(ui.Label(yA+' baseline   '+totA.toFixed(2)+' km²', STYLE.resultRow));
+resultsPanel.add(ui.Label(yB+' comparison '+totB.toFixed(2)+' km²', STYLE.resultRow));
+resultsPanel.add(ui.Label('Change classes', STYLE.subHeader));
+resultsPanel.add(ui.Label('Stable   '+stable.toFixed(2)+' km²', STYLE.resultRow));
+resultsPanel.add(ui.Label('Gain   + '+gain.toFixed(2)+' km²', STYLE.resultGood));
+resultsPanel.add(ui.Label('Loss   − '+loss.toFixed(2)+' km²', STYLE.resultBad));
+resultsPanel.add(ui.Label(
+  'Net change   '+(net&gt;=0?'+':'')+net.toFixed(2)+' km²   ('+
+  (net&gt;=0?'+':'')+pct.toFixed(1)+' %)', STYLE.resultEm));
+resultsPanel.add(makeBarChart(</code></pre>
+<p>[‘Stable’,‘Gain’,‘Loss’], [stable,gain,loss], chgPal)); });</p>
+<p>buildLegend(‘Tidal-flat change’, chgPal, [‘Stable · habitat in both years’, ‘Gain · new in’ + yB, ‘Loss · lost from’ + yA]); }, 1800); });</p>
+<p>// ———- 10. MAP CLICK INSPECTOR (kept disabled) ————————</p>
+<p>var inspectorPanel = ui.Panel({style: STYLE.inspectorPanel}); inspectorPanel.add(ui.Label(‘POINT INSPECTOR’, STYLE.inspectorTitle)); inspectorPanel.add(ui.Label( ‘Distance inspection runs only when you click a module button —’ + ‘keeps the app fast on first load.’, STYLE.inspectorBody)); map.add(inspectorPanel);</p>
+<p>map.onClick(function(coords) { inspectorPanel.clear(); inspectorPanel.add(ui.Label(‘POINT INSPECTOR’, STYLE.inspectorTitle)); inspectorPanel.add(ui.Label( ‘Lat’ + coords.lat.toFixed(4) + ’ · Lon ’ + coords.lon.toFixed(4), {fontSize: ‘10.5px’, color: COLOR.textMute, margin: ‘0 0 4px 0’, padding: ‘0’})); inspectorPanel.add(ui.Label( ‘Run a module to enable on-map distance lookup.’, STYLE.inspectorBody)); });</p>
+<p>// END — initial state shows “Ready to analyse”; no auto-run.</p>
 </div>
 </section>
 <section id="limitation" class="level3">
@@ -1466,6 +1692,7 @@ Waterway lines + buffer → permanent water body mask
 <li><p>Tidal-flat classification accuracy varies across years due to sensor transitions between Landsat 8 and Sentinel-2.</p></li>
 <li><p>Roost training samples are derived from OSM land-use labels which are not timestamped, creating potential mismatch with the 2023-2024 imagery.</p></li>
 <li><p>Accuracy is assessed by cross-validation only, without field-verified roost observations.. Distance thresholds are adopted from flyway-level literature and may benefit from local calibration using satellite tracking data such as Chan et al.&nbsp;(2019). Large tidal-flat patches require manual removal in QGIS due to GEE pixel-count constraints.</p></li>
+<li><p>All tidal-flat and roost layers are precomputed and stored as static assets; the application thereforewill not automatically incorporate newly available imagery or land-use changes until updated.</p></li>
 </ol>
 </section>
 </section>
@@ -1478,6 +1705,16 @@ Waterway lines + buffer → permanent water body mask
 <li><p>Lianyungang Municipal People’s Government Office. (2023). <em>Lianyungang Biodiversity Conservation Plan (2022–2030)</em>. Lianyungang Municipal People’s Government. https://www.lyg.gov.cn/zglygzfmhwz/upload/77131658-a99f-42c7-b407-b9865af1851c.pdf</p></li>
 <li><p>Li, X., Hou, X., Shan, K., Liu, Y., Song, Y., Wang, X., Du, P., &amp; Fan, C. (2023). <em>Identifying shorebird conservation hotspots and restoration gaps in stopover sites: A perspective of “ecologically linked” habitats</em>. <strong>Global Ecology and Conservation, 48</strong>, e02725. https://doi.org/10.1016/j.gecco.2023.e02725</p></li>
 <li><p>Kolli, M. K., Opp, C., Karthe, D., Groll, M., &amp; Kulkarni, S. (2022). <em>Automatic extraction of large-scale aquaculture encroachment areas using Canny Edge Otsu algorithm in Google Earth Engine</em>. <strong>Geocarto International, 37</strong>, 11173–11189.</p></li>
+</ul>
+</section>
+<section id="group-member" class="level2">
+<h2 class="anchored" data-anchor-id="group-member">Group Member</h2>
+<ul>
+<li><p>Yanxi Ren</p></li>
+<li><p>Jianling Zhao</p></li>
+<li><p>Zihan Luo</p></li>
+<li><p>Tianyi Wen</p></li>
+<li><p>ShadiyaAlifu</p></li>
 </ul>
 
 
