@@ -564,8 +564,8 @@ Waterway lines + buffer → permanent water body mask
 <p>(3)Combination: (1)+(2) as baseline, RF. 15-feature stack including spectral bands, inundation frequency, elevation, water proximity, edge density, and NIR texture</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/workflow_tidalflat.png" class="img-fluid figure-img"></p>
-<figcaption>Tidal Flat Workflow</figcaption>
+<p><img src="images/workflow_tidalflat.svg" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Figure1. Tidal Flat Workflow</figcaption>
 </figure>
 </div>
 <p><strong>Potential root:</strong></p>
@@ -578,8 +578,8 @@ Waterway lines + buffer → permanent water body mask
   Clean. by QGIS + OSM waterline buffer mask + fill holes + smooth </code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/workflow_roost.png" class="img-fluid figure-img"></p>
-<figcaption>Tidal Flat Workflow</figcaption>
+<p><img src="images/workflow_roost.svg" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Figure2. Roost Workflow</figcaption>
 </figure>
 </div>
 </section>
@@ -614,11 +614,6 @@ Waterway lines + buffer → permanent water body mask
 <section id="tidal" class="level4">
 <h4 class="anchored" data-anchor-id="tidal">1. Tidal</h4>
 <p>1.1 Data Preparation and Precomputations</p>
-<p>1.study area (LYG_Final) + elevation masking, coastal land</p>
-<p>2.A historical spatial baseline, Murray Global Intertidal Dataset, v1.1 (2014–2016 classification) with v2 2019 tidal wetland probability (&gt;50%), masked to the low-elevation zone</p>
-<p>3.morphological closing + vegetation exclusion (NDVI &gt; 0.4)</p>
-<p>4.Sentinel-2 time-series MNDWI + per-pixel inundation frequency + strict low vegetation (NDVI &lt; 0.2) are extracted as candidate new tidal flats, capturing post-2019 changes/emerging flat.</p>
-<p>5.merge + RF, especially Canny edge density, and NIR local standard deviation. Edge density and texture features are critical for distinguishing natural mudflats from geometrically regular aquaculture ponds</p>
 <p>In this project, our study area covers Lianyungang and a 10 km coastal buffer zone. We first preprocess multi-source remote sensing data from 2014 to 2024 to generate annual feature stacks for tidal flat mapping.</p>
 <div class="scroll-code">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Data Preparation and Precomputations</span></span>
