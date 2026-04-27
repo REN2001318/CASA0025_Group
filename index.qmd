@@ -26,29 +26,24 @@ css: styles.css
 
 ## Project Summary 
 
-Fill in the sections below to provide a brief summary of your project. Each section should have no more than 100 words. Do not edit any of the headings.
+This project develops an interactive Google Earth Engine-based preliminary screening tool for coastal wetland and migratory shorebird habitat monitoring in Lianyungang, Jiangsu Province, China. The tool is designed for local natural resources and wetland conservation agencies that need accessible spatial information on tidal-flat change and potential shorebird habitat availability.
+
+The application combines precomputed annual tidal-flat maps with potential high-tide resting-place proxies and buffer-based accessibility analysis. This design follows Li et al. (2023), who show that shorebird habitat availability depends on the ecological connection between low-tide feeding flats and high-tide roosting sites. Users can compare years and buffer distances to explore changes in potential usable habitat, connected patches, and priority areas that may require further field validation.
 
 ### Problem Statement 
 
-Lianyungang's coastal wetlands sit on the East Asian–Australasian Flyway, providing critical stopover habitat for migratory shorebirds including globally threatened species. 
-  
-Despite China's post-2018 reclamation moratorium and the Blue Bay remediation programme, coastal development continues to encroach on intertidal flats. 
-  
-Lianyungang was removed from the Yellow Sea World Heritage nomination shortlist in 2022 following contested environmental impact assessments. Ongoing litigation between conservation NGOs and development authorities highlights a persistent gap: the lack of spatially explicit, reproducible tools to evaluate where development pressures conflict with shorebird habitat. 
+Located along the East Asian–Australasian Flyway, Lianyungang’s coast supports important stopover and wintering habitats for migratory birds, with over 60,000 shorebirds passing through each migration season.
 
-This application provides a low-cost, satellite-based proxy tool for rapid broad-scale identification of potential habitat loss and development conflict zones, helping prioritise areas that warrant further detailed field assessment.
+In recent years, Lianyungang has placed growing emphasis on coastal wetland and migratory bird habitat protection while facing complex management pressures from ongoing coastal development. While conventional monitoring focuses on wetland boundaries or tidal-flat extent, now managers’re also interested in whether these areas remain usable for migratory shorebirds.
+ 
+Based on Li et al. (2023), this project processes habitat availability via the energy cost of shorebird movement between feeding and resting sites. Tidal flats may become less usable if nearby high-tide resting areas are absent or too far away.
+
+Through an interactive GEE platform, it helps local wetland managers visualise tidal-flat change and potential feeding–resting connectivity, supporting preliminary wetland monitoring, migratory bird habitat conservation, and prioritisation of field surveys in ecologically sensitive areas.
 
 
 ## End User 
 
-Who are you building this application for? How does it address a need this community has?
-
-  Coastal wetland managers and conservation planners within China's natural resources agencies and environmental NGOs.
-  
-  Identify priority areas for protection or restoration across large stretches of coastline before committing to expensive field surveys.
-  
-  Enables users to rapidly narrow down candidate sites where tidal flat loss, roosting habitat degradation, or coastal squeeze risk is highest, directing limited survey resources more efficiently.
-
+This application is built for local coastal wetland managers, conservation planners, natural resources agencies, and environmental NGOs in Lianyungang, China. It helps these users preliminarily identify priority areas for protection or restoration across long coastlines before committing to costly field surveys. With this app, they’re able to rapidly narrow down candidate sites where tidal-flat loss, potential resting-place degradation, or coastal squeeze risk may be highest. 
 
 ## Data
 
@@ -188,8 +183,6 @@ style="border:none; border-radius:18px;">
 
 :::
 ## How it Works 
-
-Use this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):
 
 ### Pre-processing Part:
 
@@ -571,7 +564,7 @@ fullDataPackage.aggregate_array('year').evaluate(function(years) {
 
 ### Identify and classify
 
-#### 1. Tidal
+#### 1. Tidal Flat
 
 We then use the Murray Global Intertidal Dataset (v1.1 and v2) as a spatial baseline and refine it through elevation masking and morphological cleaning. Based on this, we dynamically expand candidate tidal flat areas by analysing pixel-wise inundation frequency, and apply a strict NDVI threshold to remove vegetated regions (NDVI < 0.2).
 
@@ -756,9 +749,6 @@ Map.addLayer(
 
 ```
 :::
-
-
-
     
 #### 2. Roost
 
@@ -767,6 +757,8 @@ Roost identification uses a four-class suitability gradient: from managed pond e
 ![Figure5. Roost Workflow](images/workflow_roost_2.svg){width="60%" fig-align="center"}
 
 ![Figure6. Habitat suitability classification](images/Group_3.svg){width="83%" fig-align="center"}
+
+
 
 ::: {.scroll-code}
 ```javascript  
@@ -1108,10 +1100,16 @@ A manually defined mask was applied to remove a small urban area where misclassi
 3. Accuracy is assessed by cross-validation only, without field-verified roost observations.. Distance thresholds are adopted from flyway-level literature and may benefit from local calibration using satellite tracking data such as Chan et al. (2019). Large tidal-flat patches require manual removal in QGIS due to GEE pixel-count constraints.
 
 ## Reference
-Li, X., Hou, X., Shan, K., Liu, Y., Song, Y., Wang, X., Du, P. and Fan, C. (2023) Identifying shorebird conservation hotspots and restoration gaps in stopover sites: A perspective of ‘ecologically linked’ habitats. Global Ecology and Conservation, 48, e02725. Available at: [Link](https://www.sciencedirect.com/science/article/pii/S2351989423003608)
 
-Zhang, K., Dong, X., Liu, Z., Gao, W., Hu, Z. and Wu, G. (2019) Mapping tidal flats with Landsat 8 images and Google Earth Engine: A case study of the China’s eastern coastal zone circa 2015. Remote Sensing, 11(8), 924. Available at: [Link](https://doi.org/10.3390/rs11080924)
+- Zhang, K., Dong, X., Liu, Z., Gao, W., Hu, Z. and Wu, G. (2019) *Mapping tidal flats with Landsat 8 images and Google Earth Engine: A case study of the China’s eastern coastal zone circa 2015. Remote Sensing, 11(8), 924*. Available at: https://doi.org/10.3390/rs11080924
 
+- Yangtze Evening News. (2024, December 2). *Lianyungang: Over one hundred bird species winter here*. Available at: https://wap.yzwb.net/wap/news/4180391.html
 
+- Standing Committee of Lianyungang Municipal People’s Congress. (2017). *Lianyungang Coastal Wetland Protection Regulation*. Lianyungang Municipal People’s Government. Available at: https://www.lyg.gov.cn/zglygzfmhwz/dfxfgx/content/14eac3ca-1324-4cc8-abb7-4794ddb52448.html
 
+- Lianyungang Municipal People’s Government Office. (2023). *Lianyungang Biodiversity Conservation Plan (2022–2030)*. Lianyungang Municipal People’s Government. https://www.lyg.gov.cn/zglygzfmhwz/upload/77131658-a99f-42c7-b407-b9865af1851c.pdf
+
+- Li, X., Hou, X., Shan, K., Liu, Y., Song, Y., Wang, X., Du, P., & Fan, C. (2023). *Identifying shorebird conservation hotspots and restoration gaps in stopover sites: A perspective of “ecologically linked” habitats*. **Global Ecology and Conservation, 48**, e02725. https://doi.org/10.1016/j.gecco.2023.e02725
+
+- Kolli, M. K., Opp, C., Karthe, D., Groll, M., & Kulkarni, S. (2022). *Automatic extraction of large-scale aquaculture encroachment areas using Canny Edge Otsu algorithm in Google Earth Engine*. **Geocarto International, 37**, 11173–11189.
 

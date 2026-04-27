@@ -75,8 +75,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-1b3db88def35042d172274863c1cdcf0.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-78b3671aa5f9f683ec246af2dde1230f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-2f0c69e010e3da93992838767758ef7f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-3e6c1baec064a38abb7800f19e666a87.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-79c4d32b32b00c7e91290ed5a6655f4a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -330,21 +330,19 @@ background-size: cover;
 </style>
 <section id="project-summary" class="level2">
 <h2 class="anchored" data-anchor-id="project-summary">Project Summary</h2>
-<p>Fill in the sections below to provide a brief summary of your project. Each section should have no more than 100 words. Do not edit any of the headings.</p>
+<p>This project develops an interactive Google Earth Engine-based preliminary screening tool for coastal wetland and migratory shorebird habitat monitoring in Lianyungang, Jiangsu Province, China. The tool is designed for local natural resources and wetland conservation agencies that need accessible spatial information on tidal-flat change and potential shorebird habitat availability.</p>
+<p>The application combines precomputed annual tidal-flat maps with potential high-tide resting-place proxies and buffer-based accessibility analysis. This design follows Li et al.&nbsp;(2023), who show that shorebird habitat availability depends on the ecological connection between low-tide feeding flats and high-tide roosting sites. Users can compare years and buffer distances to explore changes in potential usable habitat, connected patches, and priority areas that may require further field validation.</p>
 <section id="problem-statement" class="level3">
 <h3 class="anchored" data-anchor-id="problem-statement">Problem Statement</h3>
-<p>Lianyungang’s coastal wetlands sit on the East Asian–Australasian Flyway, providing critical stopover habitat for migratory shorebirds including globally threatened species.</p>
-<p>Despite China’s post-2018 reclamation moratorium and the Blue Bay remediation programme, coastal development continues to encroach on intertidal flats.</p>
-<p>Lianyungang was removed from the Yellow Sea World Heritage nomination shortlist in 2022 following contested environmental impact assessments. Ongoing litigation between conservation NGOs and development authorities highlights a persistent gap: the lack of spatially explicit, reproducible tools to evaluate where development pressures conflict with shorebird habitat.</p>
-<p>This application provides a low-cost, satellite-based proxy tool for rapid broad-scale identification of potential habitat loss and development conflict zones, helping prioritise areas that warrant further detailed field assessment.</p>
+<p>Located along the East Asian–Australasian Flyway, Lianyungang’s coast supports important stopover and wintering habitats for migratory birds, with over 60,000 shorebirds passing through each migration season.</p>
+<p>In recent years, Lianyungang has placed growing emphasis on coastal wetland and migratory bird habitat protection while facing complex management pressures from ongoing coastal development. While conventional monitoring focuses on wetland boundaries or tidal-flat extent, now managers’re also interested in whether these areas remain usable for migratory shorebirds.</p>
+<p>Based on Li et al.&nbsp;(2023), this project processes habitat availability via the energy cost of shorebird movement between feeding and resting sites. Tidal flats may become less usable if nearby high-tide resting areas are absent or too far away.</p>
+<p>Through an interactive GEE platform, it helps local wetland managers visualise tidal-flat change and potential feeding–resting connectivity, supporting preliminary wetland monitoring, migratory bird habitat conservation, and prioritisation of field surveys in ecologically sensitive areas.</p>
 </section>
 </section>
 <section id="end-user" class="level2">
 <h2 class="anchored" data-anchor-id="end-user">End User</h2>
-<p>Who are you building this application for? How does it address a need this community has?</p>
-<p>Coastal wetland managers and conservation planners within China’s natural resources agencies and environmental NGOs.</p>
-<p>Identify priority areas for protection or restoration across large stretches of coastline before committing to expensive field surveys.</p>
-<p>Enables users to rapidly narrow down candidate sites where tidal flat loss, roosting habitat degradation, or coastal squeeze risk is highest, directing limited survey resources more efficiently.</p>
+<p>This application is built for local coastal wetland managers, conservation planners, natural resources agencies, and environmental NGOs in Lianyungang, China. It helps these users preliminarily identify priority areas for protection or restoration across long coastlines before committing to costly field surveys. With this app, they’re able to rapidly narrow down candidate sites where tidal-flat loss, potential resting-place degradation, or coastal squeeze risk may be highest.</p>
 </section>
 <section id="data" class="level2">
 <h2 class="anchored" data-anchor-id="data">Data</h2>
@@ -533,7 +531,6 @@ Waterway lines + buffer → permanent water body mask
 </section>
 <section id="how-it-works" class="level2">
 <h2 class="anchored" data-anchor-id="how-it-works">How it Works</h2>
-<p>Use this section to explain how your application works using code blocks and text explanations (no more than 500 words excluding code):</p>
 <section id="pre-processing-part" class="level3">
 <h3 class="anchored" data-anchor-id="pre-processing-part">Pre-processing Part:</h3>
 <section id="data-preparation-and-precomputations" class="level4">
@@ -911,8 +908,8 @@ Waterway lines + buffer → permanent water body mask
 </section>
 <section id="identify-and-classify" class="level3">
 <h3 class="anchored" data-anchor-id="identify-and-classify">Identify and classify</h3>
-<section id="tidal" class="level4">
-<h4 class="anchored" data-anchor-id="tidal">1. Tidal</h4>
+<section id="tidal-flat" class="level4">
+<h4 class="anchored" data-anchor-id="tidal-flat">1. Tidal Flat</h4>
 <p>We then use the Murray Global Intertidal Dataset (v1.1 and v2) as a spatial baseline and refine it through elevation masking and morphological cleaning. Based on this, we dynamically expand candidate tidal flat areas by analysing pixel-wise inundation frequency, and apply a strict NDVI threshold to remove vegetated regions (NDVI &lt; 0.2).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1445,8 +1442,14 @@ Waterway lines + buffer → permanent water body mask
 </section>
 <section id="reference" class="level2">
 <h2 class="anchored" data-anchor-id="reference">Reference</h2>
-<p>Li, X., Hou, X., Shan, K., Liu, Y., Song, Y., Wang, X., Du, P. and Fan, C. (2023) Identifying shorebird conservation hotspots and restoration gaps in stopover sites: A perspective of ‘ecologically linked’ habitats. Global Ecology and Conservation, 48, e02725. Available at: <a href="https://www.sciencedirect.com/science/article/pii/S2351989423003608">Link</a></p>
-<p>Zhang, K., Dong, X., Liu, Z., Gao, W., Hu, Z. and Wu, G. (2019) Mapping tidal flats with Landsat 8 images and Google Earth Engine: A case study of the China’s eastern coastal zone circa 2015. Remote Sensing, 11(8), 924. Available at: <a href="https://doi.org/10.3390/rs11080924">Link</a></p>
+<ul>
+<li><p>Zhang, K., Dong, X., Liu, Z., Gao, W., Hu, Z. and Wu, G. (2019) <em>Mapping tidal flats with Landsat 8 images and Google Earth Engine: A case study of the China’s eastern coastal zone circa 2015. Remote Sensing, 11(8), 924</em>. Available at: https://doi.org/10.3390/rs11080924</p></li>
+<li><p>Yangtze Evening News. (2024, December 2). <em>Lianyungang: Over one hundred bird species winter here</em>. Available at: https://wap.yzwb.net/wap/news/4180391.html</p></li>
+<li><p>Standing Committee of Lianyungang Municipal People’s Congress. (2017). <em>Lianyungang Coastal Wetland Protection Regulation</em>. Lianyungang Municipal People’s Government. Available at: https://www.lyg.gov.cn/zglygzfmhwz/dfxfgx/content/14eac3ca-1324-4cc8-abb7-4794ddb52448.html</p></li>
+<li><p>Lianyungang Municipal People’s Government Office. (2023). <em>Lianyungang Biodiversity Conservation Plan (2022–2030)</em>. Lianyungang Municipal People’s Government. https://www.lyg.gov.cn/zglygzfmhwz/upload/77131658-a99f-42c7-b407-b9865af1851c.pdf</p></li>
+<li><p>Li, X., Hou, X., Shan, K., Liu, Y., Song, Y., Wang, X., Du, P., &amp; Fan, C. (2023). <em>Identifying shorebird conservation hotspots and restoration gaps in stopover sites: A perspective of “ecologically linked” habitats</em>. <strong>Global Ecology and Conservation, 48</strong>, e02725. https://doi.org/10.1016/j.gecco.2023.e02725</p></li>
+<li><p>Kolli, M. K., Opp, C., Karthe, D., Groll, M., &amp; Kulkarni, S. (2022). <em>Automatic extraction of large-scale aquaculture encroachment areas using Canny Edge Otsu algorithm in Google Earth Engine</em>. <strong>Geocarto International, 37</strong>, 11173–11189.</p></li>
+</ul>
 
 
 </section>
