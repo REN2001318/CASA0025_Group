@@ -168,6 +168,45 @@ Both layers are linked through distance computation and multi-year change detect
 
 How does your application's interface work to address the needs of your end user?
 
+The user interface follows a simple and intuitive workflow: select a module, adjust parameters, run the analysis, and review outputs. The left control panel contains scenario settings, statistical summaries, and legends, while the right map panel presents spatial patterns in real time. This split-screen layout allows users to operate the system while simultaneously interpreting results efficiently.
+
+Two core modules are provided: **Accessibility** and **Change Over Time**.
+
+The **Accessibility** module enables users to adjust ecological movement thresholds using slider controls and instantly evaluate feeding–roosting habitat connectivity.
+
+The **Change Over Time** module allows users to compare habitat extent between two selected years and identify stable, gained, and lost tidal-flat areas.
+
+Together, these tools help users rapidly detect zones affected by habitat fragmentation, tidal-flat decline, or coastal squeeze risk, enabling more efficient allocation of limited conservation resources.
+
+::: {.columns}
+
+::: {.column width="50%"}
+![](images/01.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![](images/02.png){width=100%}
+:::
+
+:::
+### 01 Accessibility Module
+
+Users can modify three ecological distance thresholds through interactive sliders. The system calculates distances between feeding grounds and roosting habitats, classifying areas into four accessibility levels: optimal, sub-optimal, marginal, and beyond range.
+
+Results are displayed immediately through thematic maps, summary statistics, donut charts, and a dynamic legend, allowing planners to test different ecological assumptions and quickly identify disconnected or vulnerable habitat patches.
+
+### 02 Change Over Time Module
+
+Users select a baseline year and a comparison year from dropdown menus.
+
+The application automatically detects stable habitat, newly gained areas, and habitat loss, then calculates net change and percentage change in km².
+
+Outputs are visualised through change maps, bar charts, and summary panels, helping decision-makers understand long-term habitat trends and prioritise restoration areas.
+
+Once analysis is completed, the map updates automatically and the results panel displays key indicators such as habitat extent, gains, losses, connectivity classes, and net change.
+
+Visual charts and colour-coded legends improve readability, allowing users without advanced GIS expertise to interpret results quickly and make evidence-based coastal management decisions.
+
 ## The Application
 
 This section embeds the live Google Earth Engine application developed for exploring shoreline habitat and tidal flat dynamics.
