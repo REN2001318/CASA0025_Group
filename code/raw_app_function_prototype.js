@@ -9,8 +9,6 @@
 //      selected years (flexible asset naming)
 //   3. Priority Assessment – identify underserved tidal flat (habitat gaps)
 //      and rank roost by accessible feeding area
-//
-// Distance thresholds default to Ma et al. (2023) / Rogers et al. (2006):
 //   Optimal  < 1.7 km
 //   Sub-opt  1.7 – 2.8 km
 //   Marginal 2.8 – 6.2 km
@@ -160,7 +158,6 @@ var proxPanel = ui.Panel({style: {margin: '2px 0'}});
 proxPanel.add(ui.Label('Distance thresholds',
   {fontWeight: 'bold', fontSize: '13px'}));
 proxPanel.add(ui.Label(
-  'Defaults from literature (Ma et al. 2023 / Rogers et al. 2006).  ' +
   'Drag sliders to test sensitivity.',
   {fontSize: '10px', color: '#888', margin: '0 0 4px 0'}
 ));

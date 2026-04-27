@@ -9,7 +9,7 @@
 
 var CONFIG = {
   studyArea:    'projects/ee-summerxxxa99/assets/LYG_Final',
-  roostAsset:   'projects/ee-summerxxxa99/assets/roost_30m_2024',
+  roostAsset:   'projects/ee-summerxxxa99/assets/roost_30m_2024_new',
   tidalPrefix:  'projects/ee-summerxxxa99/assets/tidalflat_all/TidalFlat_',
   tidalSuffix:  '',
   referenceYear: '2024',
@@ -688,8 +688,8 @@ ctrlPanel.add(ui.Panel({
 
 
 // ---------- 6A. PROXIMITY PANEL — gauge-style thresholds -------------------
-var METER_W = 120;   
-var SLIDER_W = 190;  
+var METER_W = 120;   // 色带宽度
+var SLIDER_W = 190;  // slider 总宽度，包含右侧数值区域
 
 var SLIDER_STYLE = {
   width: SLIDER_W + 'px',
@@ -772,8 +772,7 @@ var proxPanel = card([
   ui.Label('Ecological Movement Thresholds', STYLE.cardTitle),
   ui.Label(
     'Adjust the gauges to test how movement-distance assumptions ' +
-    'reshape the habitat-accessibility classification. ' +
-    'Defaults follow Ma et al. (2023) and Rogers et al. (2006).',
+    'reshape the habitat-accessibility classification. ',
     STYLE.cardHint
   ),
   gaugesRow,
@@ -795,19 +794,24 @@ var dropB = {
             value: CONFIG.availableYears[CONFIG.availableYears.length-1],
             style: STYLE.select})
 };
-var btnChange = ui.Button({
-  label: '▶  Detect Habitat Change',
-  style: {
-    backgroundColor: '#ffffff',
-    color: '#083D77',
-    fontWeight: 'bold',
-    fontSize: '12px',
-    padding: '10px 24px',
-    margin: '24px 0 4px 0',
-    stretch: 'horizontal',
-    border: '0px'
-  }
-});
+
+  var btnChange = ui.Button({
+    label: '▶ Detect Habitat Change',
+    style: {
+      backgroundColor: '#ffffff',
+      color: '#083D77',
+      fontWeight: 'bold',
+      fontSize: '12px',
+      padding: '10px 24px',
+      margin: '24px 0 4px 0',
+      stretch: 'horizontal',
+      border: '0px'
+    }
+  });   // ← 这里结束 btnChange
+  
+  
+
+
 var chgPanel = card([
   ui.Label('Compare Habitat Extent Over Time', STYLE.cardTitle),
   ui.Label(
@@ -1017,9 +1021,19 @@ btnProximity.onClick(function() {
 // ---------- 9B. CHANGE ANALYSIS (logic unchanged) --------------------------
 
 btnChange.onClick(function() {
+    resultsPanel.clear();
+    resultsPanel.add(ui.Label('Temporal Habitat Change', STYLE.cardTitle));
+    resultsPanel.add(ui.Label(
+    'Analysing habitat change...',
+    STYLE.emptyState
+  ));
+  
+  clearLayers();
+  
+  ui.util.setTimeout(function() {
+    var yA = dropA.select.getValue();
+    var yB = dropB.select.getValue();
 
-  var yA = dropA.select.getValue();
-  var yB = dropB.select.getValue();
 
   if (yA === yB) {
     resultsPanel.clear();
@@ -1051,7 +1065,7 @@ btnChange.onClick(function() {
 
   resultsPanel.clear();
   resultsPanel.add(ui.Label('Temporal Habitat Change', STYLE.cardTitle));
-  resultsPanel.add(ui.Label('Computing change …', STYLE.emptyState));
+  resultsPanel.add(ui.Label('Rendering change map …', STYLE.emptyState));
 
   groupedArea(changeImg, function(areas) {
     var stable = areas[1] || 0, gain = areas[2] || 0, loss = areas[3] || 0;
@@ -1079,6 +1093,7 @@ btnChange.onClick(function() {
     ['Stable · habitat in both years',
      'Gain · new in ' + yB,
      'Loss · lost from ' + yA]);
+  }, 1800);
 });
 
 
