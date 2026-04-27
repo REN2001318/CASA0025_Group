@@ -129,7 +129,7 @@ This application is built for local coastal wetland managers, conservation plann
   <tr>
     <td>Murray Global Intertidal</td>
     <td>v1.1 (2014–2016) ∪ v2 prob &gt;50% (2019); historical tidal flat baseline</td>
-    <td><a href="https://developers.google.com/earth-engine/datasets/catalog/UQ_murray_Intertidal_v1_1_global_intertidal" target="_blank">Link</a></td>
+    <td><a href="https://developers.google.com/earth-engine/datasets/catalog/UQ_murray_Intertidal_v1_1_global_intertidal" target="_blank">v1.1</a> | <a href="https://developers.google.com/earth-engine/datasets/catalog/JCU_Murray_GIC_global_tidal_wetland_change_2019" target="_blank">v2</a></td>
   </tr>
   <tr>
     <td>SRTM DEM</td>
@@ -570,7 +570,7 @@ We then use the Murray Global Intertidal Dataset (v1.1 and v2) as a spatial base
 
 ![Figure2. Tidal Flat Workflow](images/workflow_tidalflat_1.svg){width="60%" fig-align="center"}
 
-Finally, we train a random forest classifier that integrates Canny edge density and near-infrared texture features to distinguish natural tidal flats from aquaculture ponds.
+Finally, we train a random forest classifier that integrates Canny edge density (Kolli et al., 2022) and near-infrared texture features to distinguish natural tidal flats from aquaculture ponds.
 
 ![Figure3. Workflow for Intertidal Candidate Zone Identification ](images/Group_2_2.svg){width="80%" fig-align="center"}
 
