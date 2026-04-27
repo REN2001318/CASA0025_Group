@@ -177,13 +177,13 @@ How does your application's interface work to address the needs of your end user
 
 This section embeds the live Google Earth Engine application developed for exploring shoreline habitat and tidal flat dynamics.
 
-::: {.column-page}
+::: {.column-screen}
 
 <iframe 
-  src="https://ee-summerxxxa99.projects.earthengine.app/view/shorebird-habitat-explorer"
-  width="100%" 
-  height="780px"
-  style="border:none; border-radius:18px;">
+src="https://ee-summerxxxa99.projects.earthengine.app/view/shorebird-habitat-explorer"
+width="100%"
+height="920px"
+style="border:none; border-radius:18px;">
 </iframe>
 
 :::
